@@ -2,8 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium HTML5 Game Collection</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0a0a0f">
+    <title>NEON ARCADE Mobile</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap');
         
@@ -13,7 +16,7 @@
             --neon-green: #00ff88;
             --neon-yellow: #ffff00;
             --dark-bg: #0a0a0f;
-            --panel-bg: rgba(20, 20, 35, 0.8);
+            --panel-bg: rgba(20, 20, 35, 0.9);
             --glass-border: rgba(255, 255, 255, 0.1);
         }
 
@@ -21,6 +24,8 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
 
         body {
@@ -29,13 +34,9 @@
             min-height: 100vh;
             color: #fff;
             overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 20% 50%, rgba(0, 243, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(255, 0, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 20%, rgba(0, 255, 136, 0.05) 0%, transparent 50%);
+            -webkit-overflow-scrolling: touch;
         }
 
-        /* Animated Background Grid */
         .bg-grid {
             position: fixed;
             top: 0;
@@ -45,834 +46,415 @@
             background-image: 
                 linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
+            background-size: 30px 30px;
             pointer-events: none;
             z-index: -1;
-            animation: gridMove 20s linear infinite;
-        }
-
-        @keyframes gridMove {
-            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
-            100% { transform: perspective(500px) rotateX(60deg) translateY(50px); }
         }
 
         .container {
-            max-width: 1600px;
+            max-width: 100%;
             margin: 0 auto;
-            padding: 20px;
+            padding: 10px;
         }
 
         header {
             text-align: center;
-            padding: 40px 20px;
-            position: relative;
+            padding: 20px 10px;
         }
 
         h1 {
             font-family: 'Orbitron', sans-serif;
-            font-size: 4em;
+            font-size: 1.8em;
             font-weight: 900;
             background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink), var(--neon-green));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
             text-transform: uppercase;
-            letter-spacing: 4px;
-            animation: titleGlow 3s ease-in-out infinite;
-            text-shadow: 0 0 30px rgba(0, 243, 255, 0.5);
-        }
-
-        @keyframes titleGlow {
-            0%, 100% { filter: hue-rotate(0deg) brightness(1); }
-            50% { filter: hue-rotate(30deg) brightness(1.2); }
+            letter-spacing: 2px;
         }
 
         .subtitle {
-            font-size: 1.3em;
+            font-size: 0.9em;
             color: rgba(255,255,255,0.7);
-            margin-top: 10px;
-            letter-spacing: 2px;
+            margin-top: 5px;
         }
 
         .stats-bar {
             display: flex;
             justify-content: center;
-            gap: 30px;
-            margin: 20px 0;
+            gap: 10px;
+            margin: 15px 0;
             flex-wrap: wrap;
+            font-size: 0.8em;
         }
 
         .stat-item {
             background: var(--panel-bg);
-            padding: 10px 20px;
-            border-radius: 20px;
+            padding: 8px 12px;
+            border-radius: 15px;
             border: 1px solid var(--glass-border);
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.9em;
         }
 
-        .stat-icon {
-            font-size: 1.2em;
-        }
-
+        /* Mobile-optimized game cards */
         .games-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 30px;
-            margin-top: 30px;
+            grid-template-columns: 1fr;
+            gap: 20px;
         }
 
         .game-card {
             background: var(--panel-bg);
-            border-radius: 20px;
+            border-radius: 15px;
             overflow: hidden;
             border: 1px solid var(--glass-border);
-            backdrop-filter: blur(20px);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-        }
-
-        .game-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink), var(--neon-green));
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .game-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 60px rgba(0, 243, 255, 0.2);
-        }
-
-        .game-card:hover::before {
-            opacity: 1;
+            touch-action: pan-y;
         }
 
         .game-header {
-            padding: 20px;
+            padding: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             background: linear-gradient(135deg, rgba(0,0,0,0.3), transparent);
-            border-bottom: 1px solid var(--glass-border);
         }
 
         .game-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.4em;
+            font-size: 1.1em;
             font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            background: linear-gradient(90deg, #fff, var(--neon-blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         .game-badge {
             background: linear-gradient(135deg, var(--neon-pink), var(--neon-blue));
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.8em;
-            font-weight: 700;
-            box-shadow: 0 4px 15px rgba(255, 0, 255, 0.3);
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.7em;
         }
 
         .game-container {
-            padding: 20px;
-            min-height: 350px;
+            padding: 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
             position: relative;
+            min-height: auto;
         }
 
         .score-display {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(0,0,0,0.6);
-            padding: 8px 16px;
-            border-radius: 20px;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            padding: 6px 12px;
+            border-radius: 15px;
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.1em;
+            font-size: 0.9em;
             color: var(--neon-yellow);
             border: 1px solid var(--neon-yellow);
-            box-shadow: 0 0 20px rgba(255, 255, 0, 0.2);
             z-index: 10;
         }
 
         .high-score {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(0,0,0,0.6);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9em;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.8);
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
             color: var(--neon-green);
             border: 1px solid var(--neon-green);
             z-index: 10;
         }
 
-        /* Enhanced 2048 */
+        /* Mobile Controls */
+        .mobile-controls {
+            display: grid;
+            grid-template-columns: repeat(3, 60px);
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: center;
+        }
+
+        .control-btn {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(0, 243, 255, 0.2), rgba(255, 0, 255, 0.2));
+            border: 2px solid var(--neon-blue);
+            border-radius: 15px;
+            color: #fff;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .control-btn:active {
+            background: var(--neon-blue);
+            transform: scale(0.95);
+        }
+
+        .control-btn.large {
+            grid-column: span 2;
+            width: 130px;
+        }
+
+        /* Swipe zones */
+        .swipe-zone {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 5;
+            touch-action: none;
+        }
+
+        /* Game-specific mobile styles */
         .grid-2048 {
             display: grid;
-            grid-template-columns: repeat(4, 70px);
-            gap: 10px;
+            grid-template-columns: repeat(4, 65px);
+            gap: 8px;
             background: linear-gradient(135deg, #1a1a2e, #16213e);
-            padding: 15px;
-            border-radius: 15px;
-            box-shadow: inset 0 4px 20px rgba(0,0,0,0.5);
+            padding: 12px;
+            border-radius: 12px;
+            touch-action: none;
         }
 
         .tile-2048 {
-            width: 70px;
-            height: 70px;
+            width: 65px;
+            height: 65px;
             background: rgba(255,255,255,0.05);
-            border-radius: 10px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.8em;
+            font-size: 1.4em;
             font-weight: 700;
             color: #fff;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: all 0.15s;
             border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .tile-2048[data-value="2"] { 
-            background: linear-gradient(135deg, #eee4da, #ede0c8); 
-            color: #776e65;
-            box-shadow: 0 0 20px rgba(238, 228, 218, 0.3);
-        }
-        .tile-2048[data-value="4"] { 
-            background: linear-gradient(135deg, #ede0c8, #f2b179); 
-            color: #776e65;
-        }
-        .tile-2048[data-value="8"] { 
-            background: linear-gradient(135deg, #f2b179, #f59563); 
-            box-shadow: 0 0 20px rgba(242, 177, 121, 0.4);
-        }
-        .tile-2048[data-value="16"] { 
-            background: linear-gradient(135deg, #f59563, #f67c5f); 
-            box-shadow: 0 0 25px rgba(245, 149, 99, 0.5);
-        }
-        .tile-2048[data-value="32"] { 
-            background: linear-gradient(135deg, #f67c5f, #f65e3b); 
-            box-shadow: 0 0 30px rgba(246, 124, 95, 0.6);
-        }
-        .tile-2048[data-value="64"] { 
-            background: linear-gradient(135deg, #f65e3b, #edcf72); 
-            box-shadow: 0 0 35px rgba(246, 94, 59, 0.7);
-        }
-        .tile-2048[data-value="128"] { 
-            background: linear-gradient(135deg, #edcf72, #edcc61); 
-            box-shadow: 0 0 40px rgba(237, 207, 114, 0.8);
-            font-size: 1.5em;
-        }
-        .tile-2048[data-value="256"] { 
-            background: linear-gradient(135deg, #edcc61, #edc850); 
-            box-shadow: 0 0 45px rgba(237, 204, 97, 0.9);
-            animation: pulseTile 2s infinite;
-        }
-        .tile-2048[data-value="512"] { 
-            background: linear-gradient(135deg, #edc850, #edc53f); 
-            box-shadow: 0 0 50px rgba(237, 197, 63, 1);
-        }
-        .tile-2048[data-value="1024"] { 
-            background: linear-gradient(135deg, #edc53f, #edc22e); 
-            box-shadow: 0 0 55px rgba(237, 197, 46, 1);
-            font-size: 1.2em;
-        }
-        .tile-2048[data-value="2048"] { 
-            background: linear-gradient(135deg, #edc22e, #ff6b6b, #4ecdc4); 
-            box-shadow: 0 0 60px rgba(255, 107, 107, 1);
-            animation: rainbow 2s linear infinite;
-            font-size: 1.2em;
-        }
-
-        @keyframes pulseTile {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        @keyframes rainbow {
-            0% { filter: hue-rotate(0deg); }
-            100% { filter: hue-rotate(360deg); }
-        }
-
-        /* Enhanced Snake */
         .snake-grid {
             display: grid;
-            grid-template-columns: repeat(15, 22px);
-            gap: 2px;
+            grid-template-columns: repeat(15, 18px);
+            gap: 1px;
             background: linear-gradient(135deg, #0d2818, #1a4d2e);
-            padding: 10px;
-            border-radius: 10px;
-            box-shadow: inset 0 4px 20px rgba(0,0,0,0.5);
+            padding: 8px;
+            border-radius: 8px;
+            touch-action: none;
         }
 
         .snake-cell {
-            width: 22px;
-            height: 22px;
+            width: 18px;
+            height: 18px;
             background: rgba(0,0,0,0.3);
-            border-radius: 4px;
-            transition: all 0.1s;
+            border-radius: 3px;
         }
 
-        .snake-head { 
-            background: linear-gradient(135deg, #ffff00, #ffeb3b) !important; 
-            border-radius: 6px;
-            box-shadow: 0 0 15px rgba(255, 255, 0, 0.8);
-            animation: snakePulse 0.5s infinite alternate;
-        }
-
-        @keyframes snakePulse {
-            from { box-shadow: 0 0 10px rgba(255, 255, 0, 0.8); }
-            to { box-shadow: 0 0 20px rgba(255, 255, 0, 1); }
-        }
-
-        .snake-body { 
-            background: linear-gradient(135deg, #00c853, #00e676) !important; 
-            box-shadow: 0 0 10px rgba(0, 200, 83, 0.5);
-        }
-
-        .snake-food { 
-            background: radial-gradient(circle, #ff1744, #d50000) !important; 
-            border-radius: 50%;
-            animation: foodPulse 1s infinite;
-            box-shadow: 0 0 15px rgba(255, 23, 68, 0.8);
-        }
-
-        @keyframes foodPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-        }
-
-        /* Enhanced Tetris */
         .tetris-board {
             display: grid;
-            grid-template-columns: repeat(10, 28px);
-            gap: 2px;
+            grid-template-columns: repeat(10, 25px);
+            gap: 1px;
             background: #000;
-            padding: 8px;
-            border: 3px solid #333;
-            border-radius: 8px;
-            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+            padding: 5px;
+            border-radius: 5px;
+            touch-action: none;
         }
 
         .tetris-cell {
-            width: 28px;
-            height: 28px;
+            width: 25px;
+            height: 25px;
             background: #111;
-            border: 1px solid #222;
-            border-radius: 3px;
-            transition: all 0.1s;
+            border-radius: 2px;
         }
 
-        .tetris-I { 
-            background: linear-gradient(135deg, #00f0f0, #00cccc); 
-            box-shadow: 0 0 10px rgba(0, 240, 240, 0.6);
-            border-color: #00ffff;
-        }
-        .tetris-O { 
-            background: linear-gradient(135deg, #f0f000, #cccc00); 
-            box-shadow: 0 0 10px rgba(240, 240, 0, 0.6);
-            border-color: #ffff00;
-        }
-        .tetris-T { 
-            background: linear-gradient(135deg, #a000f0, #8000cc); 
-            box-shadow: 0 0 10px rgba(160, 0, 240, 0.6);
-            border-color: #d500f9;
-        }
-        .tetris-S { 
-            background: linear-gradient(135deg, #00f000, #00cc00); 
-            box-shadow: 0 0 10px rgba(0, 240, 0, 0.6);
-            border-color: #00ff00;
-        }
-        .tetris-Z { 
-            background: linear-gradient(135deg, #f00000, #cc0000); 
-            box-shadow: 0 0 10px rgba(240, 0, 0, 0.6);
-            border-color: #ff0000;
-        }
-        .tetris-J { 
-            background: linear-gradient(135deg, #0000f0, #0000cc); 
-            box-shadow: 0 0 10px rgba(0, 0, 240, 0.6);
-            border-color: #0000ff;
-        }
-        .tetris-L { 
-            background: linear-gradient(135deg, #f0a000, #cc8000); 
-            box-shadow: 0 0 10px rgba(240, 160, 0, 0.6);
-            border-color: #ff9100;
-        }
-
-        /* Enhanced Wordle */
         .wordle-grid {
             display: grid;
-            grid-template-columns: repeat(5, 60px);
-            gap: 8px;
-            margin-bottom: 15px;
+            grid-template-columns: repeat(5, 50px);
+            gap: 6px;
+            margin-bottom: 10px;
         }
 
         .wordle-cell {
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             border: 2px solid #3a3a3c;
             background: rgba(0,0,0,0.5);
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.8em;
+            font-size: 1.5em;
             font-weight: 700;
-            text-transform: uppercase;
-            color: #fff;
-            border-radius: 8px;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
-        }
-
-        .wordle-cell.flip {
-            animation: flipCard 0.6s ease-in-out;
-        }
-
-        @keyframes flipCard {
-            0% { transform: rotateX(0); }
-            50% { transform: rotateX(90deg); }
-            100% { transform: rotateX(0); }
-        }
-
-        .wordle-correct { 
-            background: linear-gradient(135deg, #538d4e, #6aaa64) !important; 
-            border-color: #538d4e;
-            box-shadow: 0 0 20px rgba(83, 141, 78, 0.6);
-        }
-        .wordle-present { 
-            background: linear-gradient(135deg, #b59f3b, #c9b458) !important; 
-            border-color: #b59f3b;
-            box-shadow: 0 0 20px rgba(181, 159, 59, 0.6);
-        }
-        .wordle-absent { 
-            background: linear-gradient(135deg, #3a3a3c, #2f2f31) !important; 
-            border-color: #3a3a3c;
-        }
-
-        .wordle-keyboard {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .keyboard-row {
-            display: flex;
-            justify-content: center;
-            gap: 5px;
-        }
-
-        .wordle-key {
-            min-width: 35px;
-            height: 45px;
-            background: linear-gradient(135deg, #818384, #6a6b6c);
-            border: none;
             border-radius: 6px;
             color: #fff;
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 700;
-            font-size: 1em;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 4px 0 #565758;
         }
 
-        .wordle-key:active {
-            transform: translateY(4px);
-            box-shadow: 0 0 0 #565758;
-        }
-
-        /* Enhanced Minesweeper */
         .mines-grid {
             display: grid;
             grid-template-columns: repeat(8, 35px);
             gap: 2px;
             background: linear-gradient(135deg, #1a1a2e, #16213e);
-            padding: 10px;
-            border-radius: 10px;
-            box-shadow: inset 0 4px 20px rgba(0,0,0,0.5);
+            padding: 8px;
+            border-radius: 8px;
+            touch-action: none;
         }
 
         .mine-cell {
             width: 35px;
             height: 35px;
             background: linear-gradient(135deg, #4a4a6a, #3a3a5a);
-            border: none;
-            border-radius: 6px;
+            border-radius: 5px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: 'Orbitron', sans-serif;
             font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 4px 0 #2a2a4a, 0 4px 10px rgba(0,0,0,0.3);
-            color: #fff;
-            font-size: 1em;
+            font-size: 0.9em;
+            touch-action: manipulation;
         }
 
-        .mine-cell:active:not(.revealed) {
-            transform: translateY(4px);
-            box-shadow: 0 0 0 #2a2a4a, inset 0 2px 5px rgba(0,0,0,0.3);
-        }
-
-        .mine-cell.revealed {
-            background: linear-gradient(135deg, #2a2a4a, #1a1a3a);
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
-            transform: translateY(2px);
-        }
-
-        .mine-cell.mine { 
-            background: linear-gradient(135deg, #ff1744, #d50000) !important; 
-            animation: explode 0.5s ease-out;
-        }
-
-        @keyframes explode {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.3); }
-            100% { transform: scale(1); }
-        }
-
-        .mine-cell.flagged {
-            background: linear-gradient(135deg, #ff9100, #ff6d00) !important;
-        }
-
-        /* Enhanced Flappy Bird */
         .flappy-container {
-            width: 320px;
-            height: 240px;
+            width: 100%;
+            max-width: 350px;
+            height: 250px;
             background: linear-gradient(to bottom, #4fc3f7 0%, #81d4fa 50%, #8bc34a 50%, #689f38 100%);
             position: relative;
             overflow: hidden;
-            border-radius: 15px;
-            cursor: pointer;
-            box-shadow: inset 0 0 50px rgba(0,0,0,0.2);
+            border-radius: 12px;
+            touch-action: none;
         }
 
         .flappy-bird {
-            width: 35px;
-            height: 35px;
+            width: 30px;
+            height: 30px;
             background: linear-gradient(135deg, #ffeb3b, #fbc02d);
             border-radius: 50%;
             position: absolute;
-            left: 50px;
+            left: 40px;
             border: 2px solid #f57f17;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3), inset -5px -5px 10px rgba(0,0,0,0.1);
-            transition: transform 0.1s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
             z-index: 10;
         }
 
-        .flappy-bird::before {
-            content: '';
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            background: #fff;
-            border-radius: 50%;
-            top: 8px;
-            right: 8px;
-            border: 2px solid #333;
-        }
-
-        .flappy-bird::after {
-            content: '';
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            background: #333;
-            border-radius: 50%;
-            top: 11px;
-            right: 11px;
-        }
-
-        .flappy-wing {
-            position: absolute;
-            width: 20px;
-            height: 15px;
-            background: #ff9800;
-            border-radius: 50%;
-            left: -10px;
-            top: 10px;
-            animation: wingFlap 0.2s infinite alternate;
-        }
-
-        @keyframes wingFlap {
-            from { transform: rotate(-20deg); }
-            to { transform: rotate(20deg); }
-        }
-
-        .flappy-pipe {
-            width: 50px;
-            background: linear-gradient(to right, #4caf50, #2e7d32, #4caf50);
-            position: absolute;
-            right: -50px;
-            border: 2px solid #1b5e20;
-            box-shadow: 0 0 10px rgba(0,0,0,0.3);
-        }
-
-        /* Enhanced Chess */
         .chess-board {
             display: grid;
-            grid-template-columns: repeat(8, 45px);
+            grid-template-columns: repeat(8, 38px);
             gap: 0;
-            border: 4px solid #8b4513;
+            border: 3px solid #8b4513;
             border-radius: 5px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            touch-action: manipulation;
         }
 
         .chess-cell {
-            width: 45px;
-            height: 45px;
+            width: 38px;
+            height: 38px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.2em;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            font-size: 1.8em;
+            touch-action: manipulation;
         }
 
-        .chess-cell.light { background: linear-gradient(135deg, #f0d9b5, #e8cfa0); }
-        .chess-cell.dark { background: linear-gradient(135deg, #b58863, #a07850); }
-        
-        .chess-cell.selected { 
-            background: linear-gradient(135deg, #f7ec5e, #e6db4d) !important; 
-            box-shadow: inset 0 0 15px rgba(247, 236, 94, 0.8);
-        }
-        
-        .chess-cell.valid-move { 
-            background: radial-gradient(circle, rgba(0,255,0,0.4), transparent) !important;
-            position: relative;
-        }
-        
-        .chess-cell.valid-move::after {
-            content: '';
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            background: rgba(0,255,0,0.6);
-            border-radius: 50%;
-        }
-
-        .chess-cell.check {
-            background: radial-gradient(circle, rgba(255,0,0,0.6), transparent) !important;
-        }
-
-        /* Enhanced Sudoku */
         .sudoku-grid {
             display: grid;
-            grid-template-columns: repeat(9, 40px);
+            grid-template-columns: repeat(9, 32px);
             gap: 0;
             background: #1a1a2e;
-            padding: 4px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            padding: 3px;
+            border-radius: 8px;
+            touch-action: manipulation;
         }
 
         .sudoku-cell {
-            width: 40px;
-            height: 40px;
+            width: 32px;
+            height: 32px;
             border: 1px solid #2a2a4a;
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.3em;
+            font-size: 1.1em;
             font-weight: 700;
             background: rgba(255,255,255,0.05);
             color: #fff;
-            cursor: pointer;
-            transition: all 0.3s;
+            touch-action: manipulation;
         }
 
-        .sudoku-cell:nth-child(3n) { border-right: 2px solid var(--neon-blue); }
-        .sudoku-cell:nth-child(n+19):nth-child(-n+27),
-        .sudoku-cell:nth-child(n+46):nth-child(-n+54) { border-bottom: 2px solid var(--neon-blue); }
-        
-        .sudoku-cell.fixed { 
-            background: rgba(255,255,255,0.1); 
-            color: var(--neon-blue);
-        }
-        
-        .sudoku-cell.selected { 
-            background: var(--neon-pink) !important; 
-            color: #fff;
-            box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
-        }
-        
-        .sudoku-cell.error {
-            background: rgba(255, 0, 0, 0.3) !important;
-            animation: shake 0.5s;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-
-        /* Enhanced Platformer */
         .platformer-canvas {
-            width: 320px;
-            height: 240px;
+            width: 100%;
+            max-width: 350px;
+            height: 200px;
             background: linear-gradient(to bottom, #87ceeb 0%, #e0f6ff 40%, #8b4513 40%, #654321 100%);
             position: relative;
-            border-radius: 15px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: inset 0 0 50px rgba(0,0,0,0.2);
+            touch-action: none;
         }
 
-        .platformer-player {
-            width: 35px;
-            height: 35px;
-            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
-            position: absolute;
-            border-radius: 8px;
-            border: 2px solid #c92a2a;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            transition: all 0.1s;
-        }
-
-        .platformer-player::before {
-            content: '👀';
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            font-size: 0.8em;
-        }
-
-        .platformer-ground {
-            width: 100%;
-            height: 60px;
-            background: linear-gradient(to bottom, #8b4513, #5d4037);
-            position: absolute;
-            bottom: 0;
-            border-top: 4px solid #3e2723;
-        }
-
-        .platformer-coin {
-            width: 25px;
-            height: 25px;
-            background: linear-gradient(135deg, #ffd700, #ff8c00);
-            border-radius: 50%;
-            position: absolute;
-            border: 2px solid #ff6f00;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
-            animation: coinFloat 2s ease-in-out infinite, coinSpin 3s linear infinite;
-        }
-
-        @keyframes coinFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-
-        @keyframes coinSpin {
-            0% { transform: rotateY(0deg); }
-            100% { transform: rotateY(360deg); }
-        }
-
-        /* Enhanced Tower Defense */
         .td-canvas {
-            width: 320px;
-            height: 240px;
+            width: 100%;
+            max-width: 350px;
+            height: 220px;
             background: linear-gradient(135deg, #1b5e20, #2e7d32);
             position: relative;
-            border-radius: 15px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: inset 0 0 50px rgba(0,0,0,0.3);
+            touch-action: manipulation;
         }
 
-        .td-path {
-            width: 50px;
-            height: 100%;
-            background: linear-gradient(to right, #5d4037, #8d6e63, #5d4037);
-            position: absolute;
-            left: 135px;
-            border-left: 3px solid #3e2723;
-            border-right: 3px solid #3e2723;
+        /* Virtual keyboard for Wordle/Sudoku */
+        .virtual-keyboard {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-top: 10px;
+            width: 100%;
+            max-width: 350px;
         }
 
-        .td-tower {
-            width: 35px;
-            height: 35px;
-            background: linear-gradient(135deg, #1976d2, #0d47a1);
-            position: absolute;
-            border-radius: 8px;
-            border: 2px solid #0d47a1;
+        .keyboard-row {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .vkey {
+            min-width: 28px;
+            height: 42px;
+            background: linear-gradient(135deg, #4a4a6a, #3a3a5a);
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 0.9em;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3em;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            cursor: pointer;
-            transition: all 0.3s;
+            touch-action: manipulation;
         }
 
-        .td-tower:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 20px rgba(25, 118, 210, 0.6);
+        .vkey.wide {
+            min-width: 50px;
         }
 
-        .td-tower.range {
-            position: absolute;
-            border: 2px dashed rgba(25, 118, 210, 0.3);
-            border-radius: 50%;
-            pointer-events: none;
+        .vkey:active {
+            background: var(--neon-blue);
+            transform: scale(0.95);
         }
 
-        .td-enemy {
-            width: 30px;
-            height: 30px;
-            background: linear-gradient(135deg, #d32f2f, #b71c1c);
-            border-radius: 50%;
-            position: absolute;
-            border: 2px solid #7f0000;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-            transition: top 0.1s linear;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .td-enemy::before {
-            content: '👾';
-            font-size: 0.8em;
-        }
-
-        .td-projectile {
-            width: 8px;
-            height: 8px;
-            background: #00f3ff;
-            border-radius: 50%;
-            position: absolute;
-            box-shadow: 0 0 10px #00f3ff;
-            pointer-events: none;
-        }
-
-        /* Controls & UI */
+        /* Action buttons */
         .controls {
-            margin-top: 20px;
+            margin-top: 15px;
             display: flex;
-            gap: 12px;
+            gap: 10px;
             flex-wrap: wrap;
             justify-content: center;
         }
@@ -881,59 +463,30 @@
             background: linear-gradient(135deg, rgba(0, 243, 255, 0.2), rgba(255, 0, 255, 0.2));
             color: #fff;
             border: 1px solid var(--neon-blue);
-            padding: 12px 24px;
-            border-radius: 25px;
-            cursor: pointer;
+            padding: 10px 18px;
+            border-radius: 20px;
             font-family: 'Orbitron', sans-serif;
             font-weight: 700;
+            font-size: 0.8em;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-            font-size: 0.85em;
-        }
-
-        button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transition: left 0.5s;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0, 243, 255, 0.4);
-            border-color: var(--neon-pink);
-        }
-
-        button:hover::before {
-            left: 100%;
+            touch-action: manipulation;
         }
 
         button:active {
-            transform: translateY(0);
+            background: var(--neon-blue);
+            color: #000;
         }
 
         button.danger {
             border-color: #ff1744;
-            background: linear-gradient(135deg, rgba(255, 23, 68, 0.2), rgba(213, 0, 0, 0.2));
-        }
-
-        button.danger:hover {
-            box-shadow: 0 10px 30px rgba(255, 23, 68, 0.4);
+            background: rgba(255, 23, 68, 0.2);
         }
 
         .instructions {
-            margin-top: 15px;
-            font-size: 0.9em;
+            margin-top: 10px;
+            font-size: 0.8em;
             color: rgba(255,255,255,0.6);
             text-align: center;
-            letter-spacing: 1px;
         }
 
         .game-over {
@@ -941,147 +494,155 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(10, 10, 15, 0.95);
-            padding: 30px;
-            border-radius: 20px;
+            background: rgba(10, 10, 15, 0.98);
+            padding: 20px;
+            border-radius: 15px;
             text-align: center;
             display: none;
             z-index: 100;
             border: 2px solid var(--neon-pink);
-            box-shadow: 0 0 50px rgba(255, 0, 255, 0.5);
-            min-width: 250px;
+            min-width: 200px;
         }
 
         .game-over h3 {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.8em;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-        }
-
-        .game-over.win h3 { color: var(--neon-green); text-shadow: 0 0 20px rgba(0, 255, 136, 0.5); }
-        .game-over.lose h3 { color: #ff1744; text-shadow: 0 0 20px rgba(255, 23, 68, 0.5); }
-
-        .final-score {
             font-size: 1.3em;
-            margin-bottom: 20px;
-            color: var(--neon-yellow);
+            margin-bottom: 10px;
         }
 
-        /* Difficulty Selector */
+        /* Difficulty selector */
         .difficulty-selector {
             display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 8px;
+            margin-bottom: 10px;
             justify-content: center;
         }
 
         .diff-btn {
-            padding: 8px 16px;
-            font-size: 0.75em;
-            border-radius: 15px;
+            padding: 6px 12px;
+            font-size: 0.7em;
+            border-radius: 12px;
         }
 
         .diff-btn.active {
             background: var(--neon-blue);
             color: #000;
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
         }
 
-        /* Particle Effects */
-        .particle {
+        /* D-pad for platformer */
+        .dpad {
+            display: grid;
+            grid-template-columns: repeat(3, 55px);
+            grid-template-rows: repeat(2, 55px);
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .dpad-btn {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, rgba(0, 243, 255, 0.2), rgba(255, 0, 255, 0.2));
+            border: 2px solid var(--neon-blue);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            touch-action: none;
+            user-select: none;
+        }
+
+        .dpad-btn:active {
+            background: var(--neon-blue);
+        }
+
+        .dpad-btn.up { grid-column: 2; }
+        .dpad-btn.left { grid-column: 1; grid-row: 2; }
+        .dpad-btn.right { grid-column: 3; grid-row: 2; }
+        .dpad-btn.down { grid-column: 2; grid-row: 2; }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--panel-bg);
+            border: 1px solid var(--neon-green);
+            padding: 12px 24px;
+            border-radius: 25px;
+            color: var(--neon-green);
+            font-weight: 700;
+            z-index: 1000;
+            transition: transform 0.3s;
+        }
+
+        .notification.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Touch feedback */
+        .touch-feedback {
             position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(0, 243, 255, 0.3);
             pointer-events: none;
-            animation: particleFloat 1s ease-out forwards;
+            animation: touchRipple 0.5s ease-out;
+            z-index: 1000;
         }
 
-        @keyframes particleFloat {
-            0% { transform: translate(0, 0) scale(1); opacity: 1; }
-            100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+        @keyframes touchRipple {
+            to { transform: scale(2); opacity: 0; }
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .games-grid { grid-template-columns: 1fr; }
-            h1 { font-size: 2.5em; }
-            .stats-bar { flex-direction: column; align-items: center; }
+        /* Prevent text selection */
+        .no-select {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
 
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--dark-bg);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(var(--neon-blue), var(--neon-pink));
-            border-radius: 5px;
-        }
-
-        /* Loading Animation */
-        .loading {
+        /* Landscape warning */
+        .rotate-warning {
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background: var(--dark-bg);
-            display: flex;
+            z-index: 9999;
             align-items: center;
             justify-content: center;
-            z-index: 9999;
-            transition: opacity 0.5s;
+            flex-direction: column;
+            text-align: center;
+            padding: 20px;
         }
 
-        .loading.hidden {
-            opacity: 0;
-            pointer-events: none;
+        @media (orientation: landscape) and (max-height: 500px) {
+            .rotate-warning {
+                display: flex;
+            }
         }
 
-        .loader {
-            width: 60px;
-            height: 60px;
-            border: 4px solid rgba(0, 243, 255, 0.1);
-            border-top-color: var(--neon-blue);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Save/Load Notification */
-        .notification {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: var(--panel-bg);
-            border: 1px solid var(--neon-green);
-            padding: 15px 25px;
-            border-radius: 10px;
-            color: var(--neon-green);
-            font-weight: 700;
-            transform: translateX(400px);
-            transition: transform 0.3s;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-        }
-
-        .notification.show {
-            transform: translateX(0);
+        /* iPhone notch support */
+        @supports (padding-top: env(safe-area-inset-top)) {
+            .container {
+                padding-top: env(safe-area-inset-top);
+                padding-bottom: env(safe-area-inset-bottom);
+            }
         }
     </style>
-<base target="_blank">
 </head>
-<body>
+<body class="no-select">
     <div class="bg-grid"></div>
-    
-    <div class="loading" id="loading">
-        <div class="loader"></div>
+    <div class="rotate-warning">
+        <div style="font-size: 3em; margin-bottom: 20px;">📱</div>
+        <h2>Please Rotate Your Device</h2>
+        <p>This game is optimized for portrait mode</p>
     </div>
 
     <div class="notification" id="notification">Game Saved!</div>
@@ -1089,52 +650,46 @@
     <div class="container">
         <header>
             <h1>NEON ARCADE</h1>
-            <p class="subtitle">Premium HTML5 Game Collection • No Backend Required</p>
+            <p class="subtitle">Mobile Edition • Touch to Play</p>
             
             <div class="stats-bar">
                 <div class="stat-item">
-                    <span class="stat-icon">🏆</span>
-                    <span>Total Score: <span id="totalScore">0</span></span>
+                    <span>🏆 <span id="totalScore">0</span></span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-icon">🎮</span>
-                    <span>Games Played: <span id="gamesPlayed">0</span></span>
+                    <span>🎮 <span id="gamesPlayed">0</span></span>
                 </div>
-                <div class="stat-item">
-                    <span class="stat-icon">💾</span>
-                    <span>Auto-Save: <span style="color: var(--neon-green)">ON</span></span>
-                </div>
-                <button onclick="saveAllGames()" style="padding: 8px 16px; font-size: 0.8em;">💾 Save All</button>
-                <button onclick="loadAllGames()" style="padding: 8px 16px; font-size: 0.8em;">📂 Load All</button>
-                <button onclick="clearAllData()" class="danger" style="padding: 8px 16px; font-size: 0.8em;">🗑️ Clear</button>
+                <button onclick="saveAllGames()" style="padding: 6px 12px; font-size: 0.7em;">💾</button>
+                <button onclick="loadAllGames()" style="padding: 6px 12px; font-size: 0.7em;">📂</button>
             </div>
         </header>
 
         <div class="games-grid">
-            <!-- Game 1: 2048 -->
+            <!-- Game 1: 2048 (Swipe) -->
             <div class="game-card">
                 <div class="game-header">
-                    <span class="game-title">2048 NEON</span>
-                    <span class="game-badge">PUZZLE</span>
+                    <span class="game-title">2048 SWIPE</span>
+                    <span class="game-badge">SWIPE</span>
                 </div>
                 <div class="game-container" id="game2048">
                     <div class="high-score">Best: <span id="best2048">0</span></div>
                     <div class="score-display">Score: <span id="score2048">0</span></div>
                     <div class="grid-2048" id="grid2048"></div>
+                    <div class="swipe-zone" id="swipe2048"></div>
                     <div class="game-over lose" id="over2048">
                         <h3>Game Over</h3>
-                        <div class="final-score">Score: <span id="final2048">0</span></div>
+                        <div style="margin: 10px 0;">Score: <span id="final2048">0</span></div>
                         <button onclick="init2048()">Try Again</button>
                     </div>
                 </div>
                 <div class="controls">
-                    <button onclick="init2048()">New Game</button>
+                    <button onclick="init2048()">🔄 New</button>
                     <button onclick="undo2048()">↩️ Undo</button>
                 </div>
-                <p class="instructions">Arrow Keys to move • Merge tiles to reach 2048</p>
+                <p class="instructions">👆 Swipe up/down/left/right to move tiles</p>
             </div>
 
-            <!-- Game 2: Snake -->
+            <!-- Game 2: Snake (D-Pad) -->
             <div class="game-card">
                 <div class="game-header">
                     <span class="game-title">Cyber Snake</span>
@@ -1143,26 +698,25 @@
                 <div class="game-container" id="gameSnake">
                     <div class="high-score">Best: <span id="bestSnake">0</span></div>
                     <div class="score-display">Score: <span id="scoreSnake">0</span></div>
-                    <div class="difficulty-selector">
-                        <button class="diff-btn active" onclick="setSnakeSpeed(150)">Easy</button>
-                        <button class="diff-btn" onclick="setSnakeSpeed(100)">Normal</button>
-                        <button class="diff-btn" onclick="setSnakeSpeed(60)">Hard</button>
-                    </div>
                     <div class="snake-grid" id="snakeGrid"></div>
                     <div class="game-over lose" id="overSnake">
                         <h3>Game Over</h3>
-                        <div class="final-score">Score: <span id="finalSnake">0</span></div>
+                        <div style="margin: 10px 0;">Score: <span id="finalSnake">0</span></div>
                         <button onclick="initSnake()">Try Again</button>
                     </div>
                 </div>
-                <div class="controls">
-                    <button onclick="toggleSnake()" id="btnSnake">▶️ Start</button>
-                    <button onclick="initSnake()" class="danger">🔄 Reset</button>
+                <div class="dpad" id="snakeControls">
+                    <div class="dpad-btn up" ontouchstart="snakeSetDir(0, -1)">▲</div>
+                    <div class="dpad-btn left" ontouchstart="snakeSetDir(-1, 0)">◀</div>
+                    <div class="dpad-btn down" ontouchstart="snakeSetDir(0, 1)">▼</div>
+                    <div class="dpad-btn right" ontouchstart="snakeSetDir(1, 0)">▶</div>
                 </div>
-                <p class="instructions">Arrow Keys • Space to Pause • Eat food to grow</p>
+                <div class="controls" style="margin-top: 10px;">
+                    <button onclick="toggleSnake()" id="btnSnake">▶️ Start</button>
+                </div>
             </div>
 
-            <!-- Game 3: Tetris -->
+            <!-- Game 3: Tetris (Touch Controls) -->
             <div class="game-card">
                 <div class="game-header">
                     <span class="game-title">Block Matrix</span>
@@ -1171,26 +725,25 @@
                 <div class="game-container" id="gameTetris">
                     <div class="high-score">Best: <span id="bestTetris">0</span></div>
                     <div class="score-display">Score: <span id="scoreTetris">0</span></div>
-                    <div class="difficulty-selector">
-                        <button class="diff-btn active" onclick="setTetrisSpeed(600)">Slow</button>
-                        <button class="diff-btn" onclick="setTetrisSpeed(400)">Normal</button>
-                        <button class="diff-btn" onclick="setTetrisSpeed(200)">Fast</button>
-                    </div>
                     <div class="tetris-board" id="tetrisBoard"></div>
                     <div class="game-over lose" id="overTetris">
                         <h3>Game Over</h3>
-                        <div class="final-score">Score: <span id="finalTetris">0</span></div>
+                        <div style="margin: 10px 0;">Score: <span id="finalTetris">0</span></div>
                         <button onclick="initTetris()">Try Again</button>
                     </div>
                 </div>
+                <div class="mobile-controls" style="grid-template-columns: repeat(4, 65px);">
+                    <div class="control-btn" ontouchstart="tetrisMove(-1)">◀</div>
+                    <div class="control-btn" ontouchstart="tetrisRotate()">↻</div>
+                    <div class="control-btn" ontouchstart="tetrisMove(1)">▶</div>
+                    <div class="control-btn" ontouchstart="tetrisDrop()" style="background: rgba(255,0,0,0.3); border-color: #ff1744;">⬇</div>
+                </div>
                 <div class="controls">
                     <button onclick="toggleTetris()" id="btnTetris">▶️ Start</button>
-                    <button onclick="initTetris()" class="danger">🔄 Reset</button>
                 </div>
-                <p class="instructions">← → Move • ↑ Rotate • ↓ Soft Drop • Space Hard Drop</p>
             </div>
 
-            <!-- Game 4: Wordle -->
+            <!-- Game 4: Wordle (Virtual Keyboard) -->
             <div class="game-card">
                 <div class="game-header">
                     <span class="game-title">Word Cipher</span>
@@ -1198,23 +751,18 @@
                 </div>
                 <div class="game-container" id="gameWordle">
                     <div class="high-score">Streak: <span id="streakWordle">0</span></div>
-                    <div class="score-display">Guesses: <span id="guessesWordle">0</span>/6</div>
+                    <div class="score-display">Guess: <span id="guessesWordle">0</span>/6</div>
                     <div class="wordle-grid" id="wordleGrid"></div>
-                    <div class="wordle-keyboard" id="wordleKeyboard"></div>
+                    <div class="virtual-keyboard" id="wordleKeyboard"></div>
                     <div class="game-over win" id="overWordle">
                         <h3 id="wordleMsg">Excellent!</h3>
-                        <div class="final-score">Word: <span id="wordleAnswer"></span></div>
-                        <button onclick="initWordle()">Next Word</button>
+                        <div style="margin: 10px 0;">Word: <span id="wordleAnswer"></span></div>
+                        <button onclick="initWordle()">Next</button>
                     </div>
                 </div>
-                <div class="controls">
-                    <button onclick="initWordle()">🔄 New Word</button>
-                    <button onclick="giveHint()">💡 Hint (-1 streak)</button>
-                </div>
-                <p class="instructions">Type to guess • Green=Correct • Yellow=Wrong Position • Gray=Not in word</p>
             </div>
 
-            <!-- Game 5: Minesweeper -->
+            <!-- Game 5: Minesweeper (Touch) -->
             <div class="game-card">
                 <div class="game-header">
                     <span class="game-title">Mine Field</span>
@@ -1225,75 +773,71 @@
                     <div class="score-display">⏱️ <span id="timerMines">0</span>s | 🚩 <span id="mineCount">10</span></div>
                     <div class="difficulty-selector">
                         <button class="diff-btn active" onclick="setMinesDifficulty(8, 10)">Easy</button>
-                        <button class="diff-btn" onclick="setMinesDifficulty(12, 20)">Medium</button>
+                        <button class="diff-btn" onclick="setMinesDifficulty(12, 20)">Med</button>
                         <button class="diff-btn" onclick="setMinesDifficulty(16, 40)">Hard</button>
                     </div>
                     <div class="mines-grid" id="minesGrid"></div>
                     <div class="game-over" id="overMines">
                         <h3 id="minesTitle">Game Over</h3>
-                        <div class="final-score" id="minesMsg">Time: 0s</div>
+                        <div style="margin: 10px 0;" id="minesMsg">Time: 0s</div>
                         <button onclick="initMines()">Try Again</button>
                     </div>
                 </div>
                 <div class="controls">
-                    <button onclick="initMines()">🔄 New Game</button>
-                    <button onclick="autoSolveMines()">🤖 Auto-Solve</button>
+                    <button onclick="initMines()">🔄 New</button>
+                    <button onclick="setFlagMode()" id="flagBtn">🚩 Flag: OFF</button>
                 </div>
-                <p class="instructions">Left Click: Reveal • Right Click: Flag • Numbers = adjacent mines</p>
+                <p class="instructions">👆 Tap to reveal • Flag mode to mark mines</p>
             </div>
 
-            <!-- Game 6: Flappy Bird -->
+            <!-- Game 6: Flappy Bird (Tap) -->
             <div class="game-card">
                 <div class="game-header">
                     <span class="game-title">Neon Flight</span>
-                    <span class="game-badge">ARCADE</span>
+                    <span class="game-badge">TAP</span>
                 </div>
                 <div class="game-container" id="gameFlappy">
                     <div class="high-score">Best: <span id="bestFlappy">0</span></div>
                     <div class="score-display">Score: <span id="scoreFlappy">0</span></div>
-                    <div class="flappy-container" id="flappyContainer" onclick="flappyJump()">
-                        <div class="flappy-bird" id="flappyBird">
-                            <div class="flappy-wing"></div>
-                        </div>
+                    <div class="flappy-container" id="flappyContainer" ontouchstart="flappyJump(event)">
+                        <div class="flappy-bird" id="flappyBird"></div>
                     </div>
                     <div class="game-over lose" id="overFlappy">
                         <h3>Crash!</h3>
-                        <div class="final-score">Score: <span id="finalFlappy">0</span></div>
+                        <div style="margin: 10px 0;">Score: <span id="finalFlappy">0</span></div>
                         <button onclick="initFlappy()">Try Again</button>
                     </div>
                 </div>
                 <div class="controls">
                     <button onclick="toggleFlappy()" id="btnFlappy">▶️ Start</button>
-                    <button onclick="initFlappy()" class="danger">🔄 Reset</button>
                 </div>
-                <p class="instructions">Click, Space, or Tap to jump • Avoid pipes • Collect points</p>
+                <p class="instructions">👆 Tap screen to jump • Avoid pipes</p>
             </div>
 
-            <!-- Game 7: Chess -->
+            <!-- Game 7: Chess (Touch) -->
             <div class="game-card">
                 <div class="game-header">
                     <span class="game-title">Cyber Chess</span>
                     <span class="game-badge">STRATEGY</span>
                 </div>
                 <div class="game-container" id="gameChess">
-                    <div class="high-score">Turn: <span id="chessTurn">White</span></div>
-                    <div class="score-display" id="chessStatus">Select a piece</div>
+                    <div class="high-score" id="chessTurn">White</div>
+                    <div class="score-display" id="chessStatus">Select piece</div>
                     <div class="chess-board" id="chessBoard"></div>
                     <div class="game-over win" id="overChess">
                         <h3 id="chessResult">Checkmate!</h3>
-                        <div class="final-score" id="chessWinner">White Wins!</div>
+                        <div style="margin: 10px 0;" id="chessWinner">White Wins!</div>
                         <button onclick="initChess()">New Game</button>
                     </div>
                 </div>
                 <div class="controls">
-                    <button onclick="initChess()">🔄 New Game</button>
+                    <button onclick="initChess()">🔄 New</button>
                     <button onclick="undoChess()">↩️ Undo</button>
-                    <button onclick="toggleAIChess()" id="btnAIChess">🤖 vs AI: OFF</button>
+                    <button onclick="toggleAIChess()" id="btnAIChess">🤖 AI: OFF</button>
                 </div>
-                <p class="instructions">Click piece then destination • AI available • Undo last move</p>
             </div>
 
-            <!-- Game 8: Sudoku -->
+            <!-- Game 8: Sudoku (Virtual Numpad) -->
             <div class="game-card">
                 <div class="game-header">
                     <span class="game-title">Number Matrix</span>
@@ -1301,28 +845,22 @@
                 </div>
                 <div class="game-container" id="gameSudoku">
                     <div class="high-score">Solved: <span id="solvedSudoku">0</span></div>
-                    <div class="score-display" id="sudokuStatus">Select a cell</div>
+                    <div class="score-display" id="sudokuStatus">Select cell</div>
                     <div class="difficulty-selector">
                         <button class="diff-btn active" onclick="setSudokuDifficulty(30)">Easy</button>
-                        <button class="diff-btn" onclick="setSudokuDifficulty(40)">Medium</button>
+                        <button class="diff-btn" onclick="setSudokuDifficulty(40)">Med</button>
                         <button class="diff-btn" onclick="setSudokuDifficulty(50)">Hard</button>
                     </div>
                     <div class="sudoku-grid" id="sudokuGrid"></div>
+                    <div class="virtual-keyboard" id="sudokuKeyboard"></div>
                     <div class="game-over win" id="overSudoku">
                         <h3>Solved!</h3>
-                        <div class="final-score">Perfect!</div>
-                        <button onclick="initSudoku()">Next Puzzle</button>
+                        <button onclick="initSudoku()">Next</button>
                     </div>
                 </div>
-                <div class="controls">
-                    <button onclick="initSudoku()">🔄 New Puzzle</button>
-                    <button onclick="solveSudoku()">💡 Solve</button>
-                    <button onclick="hintSudoku()">🔍 Hint</button>
-                </div>
-                <p class="instructions">Click cell then 1-9 • 0 or Delete to clear • No duplicates in row/column/box</p>
             </div>
 
-            <!-- Game 9: Platformer -->
+            <!-- Game 9: Platformer (Touch D-Pad) -->
             <div class="game-card">
                 <div class="game-header">
                     <span class="game-title">Jump Core</span>
@@ -1336,68 +874,52 @@
                         <div class="platformer-ground"></div>
                     </div>
                     <div class="game-over win" id="overPlatformer">
-                        <h3>Level Complete!</h3>
-                        <div class="final-score">Coins: <span id="finalPlatformer">0</span></div>
+                        <h3>Complete!</h3>
+                        <div style="margin: 10px 0;">Coins: <span id="finalPlatformer">0</span></div>
                         <button onclick="nextLevelPlatformer()">Next Level</button>
                     </div>
                 </div>
-                <div class="controls">
-                    <button onclick="togglePlatformer()" id="btnPlatformer">▶️ Start</button>
-                    <button onclick="initPlatformer()" class="danger">🔄 Reset</button>
+                <div class="dpad" id="platControls">
+                    <div class="dpad-btn up" ontouchstart="platJump()">▲</div>
+                    <div class="dpad-btn left" ontouchstart="platMove(-1)" ontouchend="platStop()">◀</div>
+                    <div class="dpad-btn right" ontouchstart="platMove(1)" ontouchend="platStop()">▶</div>
                 </div>
-                <p class="instructions">← → Move • Space/↑ Jump • Collect coins • Avoid falling</p>
+                <div class="controls" style="margin-top: 10px;">
+                    <button onclick="togglePlatformer()" id="btnPlatformer">▶️ Start</button>
+                </div>
             </div>
 
-            <!-- Game 10: Tower Defense -->
+            <!-- Game 10: Tower Defense (Touch) -->
             <div class="game-card">
                 <div class="game-header">
                     <span class="game-title">Defense Grid</span>
-                    <span class="game-badge">STRATEGY</span>
+                    <span class="game-badge">TOWER</span>
                 </div>
                 <div class="game-container" id="gameTD">
                     <div class="high-score">Wave: <span id="waveTD">0</span></div>
                     <div class="score-display">❤️ <span id="livesTD">20</span> | 💰 <span id="goldTD">100</span></div>
-                    <div class="td-canvas" id="tdCanvas" onclick="placeTower(event)">
+                    <div class="td-canvas" id="tdCanvas" ontouchstart="placeTower(event)">
                         <div class="td-path"></div>
                     </div>
                     <div class="game-over lose" id="overTD">
-                        <h3>Base Destroyed</h3>
-                        <div class="final-score">Waves Survived: <span id="finalWaveTD">0</span></div>
+                        <h3>Destroyed</h3>
+                        <div style="margin: 10px 0;">Waves: <span id="finalWaveTD">0</span></div>
                         <button onclick="initTD()">Try Again</button>
                     </div>
                 </div>
                 <div class="controls">
-                    <button onclick="toggleTD()" id="btnTD">▶️ Start Wave</button>
-                    <button onclick="upgradeTowers()">⬆️ Upgrade (100g)</button>
-                    <button onclick="initTD()" class="danger">🔄 Reset</button>
+                    <button onclick="toggleTD()" id="btnTD">▶️ Wave</button>
+                    <button onclick="upgradeTowers()">⬆️ Up (100g)</button>
                 </div>
-                <p class="instructions">Click map to place towers (50g) • Upgrade to increase range/damage</p>
+                <p class="instructions">👆 Tap to place towers • Stop the enemies!</p>
             </div>
         </div>
     </div>
 
     <script>
-        // ==================== GLOBAL SYSTEM ====================
-        const STORAGE_KEY = 'neon_arcade_v2';
-        let globalStats = { totalScore: 0, gamesPlayed: 0, lastPlayed: Date.now() };
-        
-        // Audio Context for sound effects
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        const audioCtx = new AudioContext();
-        
-        function playSound(frequency, type = 'sine', duration = 0.1) {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.frequency.value = frequency;
-            osc.type = type;
-            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
-            osc.start(audioCtx.currentTime);
-            osc.stop(audioCtx.currentTime + duration);
-        }
+        // ==================== MOBILE UTILITIES ====================
+        const STORAGE_KEY = 'neon_arcade_mobile_v1';
+        let globalStats = { totalScore: 0, gamesPlayed: 0 };
 
         function showNotification(msg) {
             const notif = document.getElementById('notification');
@@ -1406,76 +928,38 @@
             setTimeout(() => notif.classList.remove('show'), 2000);
         }
 
-        function createParticles(x, y, color, count = 8) {
-            const container = document.body;
-            for (let i = 0; i < count; i++) {
-                const p = document.createElement('div');
-                p.className = 'particle';
-                p.style.left = x + 'px';
-                p.style.top = y + 'px';
-                p.style.width = '6px';
-                p.style.height = '6px';
-                p.style.background = color;
-                p.style.borderRadius = '50%';
-                p.style.setProperty('--tx', (Math.random() - 0.5) * 100 + 'px');
-                p.style.setProperty('--ty', (Math.random() - 0.5) * 100 + 'px');
-                container.appendChild(p);
-                setTimeout(() => p.remove(), 1000);
-            }
+        function createTouchFeedback(x, y) {
+            const feedback = document.createElement('div');
+            feedback.className = 'touch-feedback';
+            feedback.style.left = (x - 20) + 'px';
+            feedback.style.top = (y - 20) + 'px';
+            document.body.appendChild(feedback);
+            setTimeout(() => feedback.remove(), 500);
         }
 
-        // Save/Load System
+        // Prevent zoom on double tap
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', (e) => {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+
+        // ==================== SAVE/LOAD ====================
         function saveAllGames() {
-            const data = {
-                globalStats,
-                games: {
-                    g2048: { score: score2048, best: best2048, grid: grid2048 },
-                    snake: { score: scoreSnake, best: bestSnake, snake: snake, running: snakeRunning },
-                    tetris: { score: scoreTetris, best: bestTetris, board: boardTetris },
-                    wordle: { streak: streakWordle, grid: gridWordle },
-                    mines: { wins: winsMines, time: timerMinesValue },
-                    flappy: { score: flappyScore, best: bestFlappy },
-                    chess: { board: chessBoard, turn: currentTurn },
-                    sudoku: { solved: solvedSudoku, grid: sudokuGrid },
-                    platformer: { level: levelPlatformer, score: platScore },
-                    td: { gold: tdGold, lives: tdLives, wave: tdWave }
-                }
-            };
+            const data = { globalStats, timestamp: Date.now() };
             localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-            showNotification('All Games Saved! 💾');
-            playSound(800, 'sine', 0.2);
+            showNotification('💾 Saved!');
         }
 
         function loadAllGames() {
             const data = JSON.parse(localStorage.getItem(STORAGE_KEY));
-            if (!data) {
-                showNotification('No save data found');
-                return;
-            }
-            
-            globalStats = data.globalStats || globalStats;
-            updateGlobalStats();
-            
-            // Restore game states
-            if (data.games) {
-                if (data.games.g2048) {
-                    score2048 = data.games.g2048.score || 0;
-                    best2048 = data.games.g2048.best || 0;
-                    grid2048 = data.games.g2048.grid || [];
-                    document.getElementById('best2048').textContent = best2048;
-                    if (grid2048.length) render2048();
-                }
-                // Similar for other games...
-            }
-            
-            showNotification('Games Loaded! 📂');
-            playSound(600, 'sine', 0.2);
-        }
-
-        function clearAllData() {
-            if (confirm('Clear all saved data? This cannot be undone.')) {
-                localStorage.removeItem(STORAGE_KEY);
-                location.reload();
+            if (data) {
+                globalStats = data.globalStats;
+                updateGlobalStats();
+                showNotification('📂 Loaded!');
             }
         }
 
@@ -1484,26 +968,47 @@
             document.getElementById('gamesPlayed').textContent = globalStats.gamesPlayed;
         }
 
-        // ==================== GAME 1: 2048 ====================
+        // ==================== GAME 1: 2048 (Swipe) ====================
         let grid2048 = [], score2048 = 0, best2048 = 0, undoStack2048 = [];
 
         function init2048() {
             grid2048 = Array(4).fill().map(() => Array(4).fill(0));
             score2048 = 0;
             undoStack2048 = [];
-            updateScore2048();
+            document.getElementById('score2048').textContent = '0';
+            document.getElementById('over2048').style.display = 'none';
             addTile2048();
             addTile2048();
             render2048();
-            document.getElementById('over2048').style.display = 'none';
+            setupSwipe2048();
         }
 
-        function updateScore2048() {
-            document.getElementById('score2048').textContent = score2048;
-            if (score2048 > best2048) {
-                best2048 = score2048;
-                document.getElementById('best2048').textContent = best2048;
-            }
+        function setupSwipe2048() {
+            const zone = document.getElementById('swipe2048');
+            let startX, startY;
+            
+            zone.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+                createTouchFeedback(startX, startY);
+            }, {passive: true});
+            
+            zone.addEventListener('touchend', (e) => {
+                if (!startX || !startY) return;
+                const endX = e.changedTouches[0].clientX;
+                const endY = e.changedTouches[0].clientY;
+                
+                const dx = endX - startX;
+                const dy = endY - startY;
+                
+                if (Math.abs(dx) > Math.abs(dy)) {
+                    if (Math.abs(dx) > 30) move2048(dx > 0 ? 'right' : 'left');
+                } else {
+                    if (Math.abs(dy) > 30) move2048(dy > 0 ? 'down' : 'up');
+                }
+                
+                startX = startY = null;
+            }, {passive: true});
         }
 
         function addTile2048() {
@@ -1514,7 +1019,6 @@
             if (empty.length) {
                 let {r, c} = empty[Math.floor(Math.random() * empty.length)];
                 grid2048[r][c] = Math.random() < 0.9 ? 2 : 4;
-                playSound(400 + grid2048[r][c] * 10, 'sine', 0.05);
             }
         }
 
@@ -1528,9 +1032,6 @@
                     if (grid2048[r][c]) {
                         cell.textContent = grid2048[r][c];
                         cell.setAttribute('data-value', grid2048[r][c]);
-                        if (grid2048[r][c] >= 2048) {
-                            createParticles(grid.offsetLeft + c * 80, grid.offsetTop + r * 80, '#ff6b6b', 12);
-                        }
                     }
                     grid.appendChild(cell);
                 }
@@ -1558,7 +1059,6 @@
                     if (row[i] === row[i + 1]) {
                         row[i] *= 2;
                         score2048 += row[i];
-                        playSound(300 + row[i], 'square', 0.1);
                         row.splice(i + 1, 1);
                         moved = true;
                     }
@@ -1573,8 +1073,15 @@
                 grid2048 = working;
                 addTile2048();
                 render2048();
-                updateScore2048();
-                if (!canMove2048()) gameOver2048();
+                document.getElementById('score2048').textContent = score2048;
+                if (score2048 > best2048) {
+                    best2048 = score2048;
+                    document.getElementById('best2048').textContent = best2048;
+                }
+                if (!canMove2048()) {
+                    document.getElementById('final2048').textContent = score2048;
+                    document.getElementById('over2048').style.display = 'block';
+                }
             }
         }
 
@@ -1584,7 +1091,7 @@
                 grid2048 = prev.grid;
                 score2048 = prev.score;
                 render2048();
-                updateScore2048();
+                document.getElementById('score2048').textContent = score2048;
             }
         }
 
@@ -1599,25 +1106,9 @@
             return false;
         }
 
-        function gameOver2048() {
-            document.getElementById('final2048').textContent = score2048;
-            document.getElementById('over2048').style.display = 'block';
-            globalStats.totalScore += score2048;
-            globalStats.gamesPlayed++;
-            updateGlobalStats();
-            playSound(200, 'sawtooth', 0.5);
-        }
-
-        document.addEventListener('keydown', e => {
-            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
-                e.preventDefault();
-                move2048(e.key.replace('Arrow', '').toLowerCase());
-            }
-        });
-
-        // ==================== GAME 2: SNAKE ====================
-        let snake = [], food = {}, dir = {x: 0, y: 0}, nextDir = {x: 0, y: 0};
-        let snakeInterval, scoreSnake = 0, bestSnake = 0, snakeRunning = false, snakeSpeed = 150;
+        // ==================== GAME 2: SNAKE (Touch) ====================
+        let snake = [], food = {}, dir = {x: 1, y: 0}, nextDir = {x: 1, y: 0};
+        let snakeInterval, scoreSnake = 0, bestSnake = 0, snakeRunning = false;
 
         function initSnake() {
             snake = [{x: 7, y: 7}];
@@ -1625,19 +1116,16 @@
             nextDir = {x: 1, y: 0};
             scoreSnake = 0;
             document.getElementById('scoreSnake').textContent = '0';
-            placeFoodSnake();
             document.getElementById('overSnake').style.display = 'none';
+            placeFoodSnake();
             renderSnake();
         }
 
-        function setSnakeSpeed(speed) {
-            snakeSpeed = speed;
-            document.querySelectorAll('#gameSnake .diff-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            if (snakeRunning) {
-                clearInterval(snakeInterval);
-                snakeInterval = setInterval(updateSnake, snakeSpeed);
+        function snakeSetDir(dx, dy) {
+            if ((dx !== 0 && dir.x === 0) || (dy !== 0 && dir.y === 0)) {
+                nextDir = {x: dx, y: dy};
             }
+            if (!snakeRunning) toggleSnake();
         }
 
         function placeFoodSnake() {
@@ -1675,8 +1163,6 @@
             if (head.x === food.x && head.y === food.y) {
                 scoreSnake += 10;
                 document.getElementById('scoreSnake').textContent = scoreSnake;
-                playSound(600, 'sine', 0.1);
-                createParticles(food.x * 24, food.y * 24, '#00ff88', 6);
                 placeFoodSnake();
             } else {
                 snake.pop();
@@ -1690,15 +1176,10 @@
             document.getElementById('btnSnake').textContent = '▶️ Start';
             document.getElementById('finalSnake').textContent = scoreSnake;
             document.getElementById('overSnake').style.display = 'block';
-            
             if (scoreSnake > bestSnake) {
                 bestSnake = scoreSnake;
                 document.getElementById('bestSnake').textContent = bestSnake;
             }
-            globalStats.totalScore += scoreSnake;
-            globalStats.gamesPlayed++;
-            updateGlobalStats();
-            playSound(150, 'sawtooth', 0.5);
         }
 
         function toggleSnake() {
@@ -1708,24 +1189,13 @@
                 document.getElementById('btnSnake').textContent = '▶️ Resume';
             } else {
                 if (snake.length === 0) initSnake();
-                snakeInterval = setInterval(updateSnake, snakeSpeed);
+                snakeInterval = setInterval(updateSnake, 120);
                 snakeRunning = true;
                 document.getElementById('btnSnake').textContent = '⏸️ Pause';
             }
         }
 
-        document.addEventListener('keydown', e => {
-            if (!snakeRunning) return;
-            switch(e.key) {
-                case 'ArrowUp': if (dir.y === 0) nextDir = {x: 0, y: -1}; break;
-                case 'ArrowDown': if (dir.y === 0) nextDir = {x: 0, y: 1}; break;
-                case 'ArrowLeft': if (dir.x === 0) nextDir = {x: -1, y: 0}; break;
-                case 'ArrowRight': if (dir.x === 0) nextDir = {x: 1, y: 0}; break;
-                case ' ': e.preventDefault(); toggleSnake(); break;
-            }
-        });
-
-        // ==================== GAME 3: TETRIS ====================
+        // ==================== GAME 3: TETRIS (Touch) ====================
         const tetrominoes = {
             I: {shape: [[1,1,1,1]], color: 'I'},
             O: {shape: [[1,1],[1,1]], color: 'O'},
@@ -1737,7 +1207,7 @@
         };
 
         let boardTetris = [], currentPiece = null, scoreTetris = 0, bestTetris = 0;
-        let tetrisInterval, tetrisRunning = false, tetrisSpeed = 500;
+        let tetrisInterval, tetrisRunning = false;
 
         function initTetris() {
             boardTetris = Array(20).fill().map(() => Array(10).fill(0));
@@ -1746,16 +1216,6 @@
             document.getElementById('overTetris').style.display = 'none';
             spawnPiece();
             renderTetris();
-        }
-
-        function setTetrisSpeed(speed) {
-            tetrisSpeed = speed;
-            document.querySelectorAll('#gameTetris .diff-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            if (tetrisRunning) {
-                clearInterval(tetrisInterval);
-                tetrisInterval = setInterval(updateTetris, tetrisSpeed);
-            }
         }
 
         function spawnPiece() {
@@ -1768,12 +1228,12 @@
                 y: 0,
                 color: tetrominoes[type].color
             };
-            if (!isValidPosition(currentPiece.shape, currentPiece.x, currentPiece.y)) {
+            if (!isValidTetris(currentPiece.shape, currentPiece.x, currentPiece.y)) {
                 gameOverTetris();
             }
         }
 
-        function isValidPosition(shape, x, y) {
+        function isValidTetris(shape, x, y) {
             for (let r = 0; r < shape.length; r++) {
                 for (let c = 0; c < shape[r].length; c++) {
                     if (shape[r][c]) {
@@ -1814,15 +1274,11 @@
 
         function updateTetris() {
             if (!currentPiece) return;
-            if (isValidPosition(currentPiece.shape, currentPiece.x, currentPiece.y + 1)) {
+            if (isValidTetris(currentPiece.shape, currentPiece.x, currentPiece.y + 1)) {
                 currentPiece.y++;
             } else {
                 lockPiece();
-                const lines = clearLines();
-                if (lines > 0) {
-                    playSound(400 + lines * 100, 'square', 0.2);
-                    createParticles(150, 100, '#00f3ff', lines * 3);
-                }
+                clearLines();
                 spawnPiece();
             }
             renderTetris();
@@ -1851,24 +1307,33 @@
                 }
             }
             if (lines) {
-                scoreTetris += [0, 100, 300, 600, 1000][lines] * (21 - Math.floor(tetrisSpeed / 30));
+                scoreTetris += lines * 100;
                 document.getElementById('scoreTetris').textContent = scoreTetris;
             }
-            return lines;
         }
 
-        function rotatePiece() {
+        function tetrisMove(dx) {
+            if (!currentPiece) return;
+            if (isValidTetris(currentPiece.shape, currentPiece.x + dx, currentPiece.y)) {
+                currentPiece.x += dx;
+                renderTetris();
+            }
+        }
+
+        function tetrisRotate() {
+            if (!currentPiece) return;
             const rotated = currentPiece.shape[0].map((_, i) => 
                 currentPiece.shape.map(row => row[i]).reverse()
             );
-            if (isValidPosition(rotated, currentPiece.x, currentPiece.y)) {
+            if (isValidTetris(rotated, currentPiece.x, currentPiece.y)) {
                 currentPiece.shape = rotated;
-                playSound(500, 'sine', 0.05);
+                renderTetris();
             }
         }
 
-        function hardDrop() {
-            while (isValidPosition(currentPiece.shape, currentPiece.x, currentPiece.y + 1)) {
+        function tetrisDrop() {
+            if (!currentPiece) return;
+            while (isValidTetris(currentPiece.shape, currentPiece.x, currentPiece.y + 1)) {
                 currentPiece.y++;
                 scoreTetris += 2;
             }
@@ -1882,15 +1347,10 @@
             document.getElementById('btnTetris').textContent = '▶️ Start';
             document.getElementById('finalTetris').textContent = scoreTetris;
             document.getElementById('overTetris').style.display = 'block';
-            
             if (scoreTetris > bestTetris) {
                 bestTetris = scoreTetris;
                 document.getElementById('bestTetris').textContent = bestTetris;
             }
-            globalStats.totalScore += scoreTetris;
-            globalStats.gamesPlayed++;
-            updateGlobalStats();
-            playSound(200, 'sawtooth', 0.5);
         }
 
         function toggleTetris() {
@@ -1900,33 +1360,13 @@
                 document.getElementById('btnTetris').textContent = '▶️ Resume';
             } else {
                 if (!currentPiece) initTetris();
-                tetrisInterval = setInterval(updateTetris, tetrisSpeed);
+                tetrisInterval = setInterval(updateTetris, 500);
                 tetrisRunning = true;
                 document.getElementById('btnTetris').textContent = '⏸️ Pause';
             }
         }
 
-        document.addEventListener('keydown', e => {
-            if (!tetrisRunning || !currentPiece) return;
-            switch(e.key) {
-                case 'ArrowLeft': 
-                    if (isValidPosition(currentPiece.shape, currentPiece.x - 1, currentPiece.y)) currentPiece.x--;
-                    break;
-                case 'ArrowRight':
-                    if (isValidPosition(currentPiece.shape, currentPiece.x + 1, currentPiece.y)) currentPiece.x++;
-                    break;
-                case 'ArrowDown':
-                    updateTetris();
-                    scoreTetris += 1;
-                    document.getElementById('scoreTetris').textContent = scoreTetris;
-                    break;
-                case 'ArrowUp': rotatePiece(); break;
-                case ' ': hardDrop(); break;
-            }
-            renderTetris();
-        });
-
-        // ==================== GAME 4: WORDLE ====================
+        // ==================== GAME 4: WORDLE (Virtual Keyboard) ====================
         const wordList = ['REACT', 'HOUSE', 'PLANE', 'WATER', 'MUSIC', 'LIGHT', 'POWER', 'BRAIN', 'MOUSE', 'PHONE', 'WORLD', 'BEACH', 'DANCE', 'LAUGH', 'DREAM', 'SMILE', 'HEART', 'SPACE', 'ROBOT', 'CYBER'];
         let targetWord = '', currentRow = 0, currentCol = 0, gridWordle = [], streakWordle = 0;
 
@@ -1938,8 +1378,7 @@
             document.getElementById('overWordle').style.display = 'none';
             document.getElementById('guessesWordle').textContent = '0';
             renderWordle();
-            createKeyboard();
-            console.log('Debug:', targetWord); // For testing
+            createWordleKeyboard();
         }
 
         function renderWordle() {
@@ -1951,9 +1390,7 @@
                     cell.className = 'wordle-cell';
                     cell.textContent = gridWordle[r][c];
                     if (r < currentRow) {
-                        const guess = gridWordle[r].join('');
                         const target = targetWord.split('');
-                        setTimeout(() => cell.classList.add('flip'), c * 100);
                         if (target[c] === gridWordle[r][c]) cell.classList.add('wordle-correct');
                         else if (target.includes(gridWordle[r][c])) cell.classList.add('wordle-present');
                         else cell.classList.add('wordle-absent');
@@ -1963,7 +1400,7 @@
             }
         }
 
-        function createKeyboard() {
+        function createWordleKeyboard() {
             const kb = document.getElementById('wordleKeyboard');
             kb.innerHTML = '';
             const rows = ['QWERTYUIOP', 'ASDFGHJKL', 'ZXCVBNM'];
@@ -1972,19 +1409,24 @@
                 rowDiv.className = 'keyboard-row';
                 row.split('').forEach(char => {
                     const key = document.createElement('button');
-                    key.className = 'wordle-key';
+                    key.className = 'vkey';
                     key.textContent = char;
-                    key.onclick = () => inputLetter(char);
+                    key.ontouchstart = () => inputLetter(char);
                     key.id = 'key-' + char;
                     rowDiv.appendChild(key);
                 });
                 if (i === 2) {
                     const enter = document.createElement('button');
-                    enter.className = 'wordle-key';
+                    enter.className = 'vkey wide';
                     enter.textContent = '⏎';
-                    enter.style.minWidth = '50px';
-                    enter.onclick = submitGuess;
+                    enter.ontouchstart = submitGuess;
                     rowDiv.appendChild(enter);
+                    
+                    const del = document.createElement('button');
+                    del.className = 'vkey wide';
+                    del.textContent = '⌫';
+                    del.ontouchstart = deleteLetter;
+                    rowDiv.appendChild(del);
                 }
                 kb.appendChild(rowDiv);
             });
@@ -1994,7 +1436,14 @@
             if (currentCol < 5 && currentRow < 6) {
                 gridWordle[currentRow][currentCol] = char;
                 currentCol++;
-                playSound(600, 'sine', 0.05);
+                renderWordle();
+            }
+        }
+
+        function deleteLetter() {
+            if (currentCol > 0) {
+                currentCol--;
+                gridWordle[currentRow][currentCol] = '';
                 renderWordle();
             }
         }
@@ -2003,78 +1452,40 @@
             if (currentCol !== 5) return;
             const guess = gridWordle[currentRow].join('');
             
-            // Update keyboard colors
             for (let c = 0; c < 5; c++) {
                 const char = gridWordle[currentRow][c];
                 const key = document.getElementById('key-' + char);
-                if (targetWord[c] === char) key.style.background = '#538d4e';
-                else if (targetWord.includes(char) && key.style.background !== '#538d4e') key.style.background = '#b59f3b';
-                else if (!targetWord.includes(char)) key.style.background = '#3a3a3c';
+                const target = targetWord.split('');
+                if (target[c] === char) key.style.background = '#538d4e';
+                else if (target.includes(char)) key.style.background = '#b59f3b';
+                else key.style.background = '#3a3a3c';
             }
 
             document.getElementById('guessesWordle').textContent = currentRow + 1;
             renderWordle();
-            playSound(400, 'square', 0.1);
 
             if (guess === targetWord) {
-                setTimeout(() => {
-                    streakWordle++;
-                    document.getElementById('streakWordle').textContent = streakWordle;
-                    document.getElementById('wordleMsg').textContent = ['Genius!', 'Magnificent!', 'Impressive!', 'Splendid!', 'Great!', 'Phew!'][currentRow];
-                    document.getElementById('wordleAnswer').textContent = targetWord;
-                    document.getElementById('overWordle').className = 'game-over win';
-                    document.getElementById('overWordle').style.display = 'block';
-                    playSound(800, 'sine', 0.3);
-                    createParticles(150, 150, '#00ff88', 15);
-                }, 500);
+                streakWordle++;
+                document.getElementById('streakWordle').textContent = streakWordle;
+                document.getElementById('wordleMsg').textContent = ['Genius!', 'Magnificent!', 'Impressive!', 'Splendid!', 'Great!', 'Phew!'][currentRow];
+                document.getElementById('wordleAnswer').textContent = targetWord;
+                document.getElementById('overWordle').style.display = 'block';
             } else if (currentRow === 5) {
-                setTimeout(() => {
-                    streakWordle = 0;
-                    document.getElementById('streakWordle').textContent = streakWordle;
-                    document.getElementById('wordleMsg').textContent = 'Game Over';
-                    document.getElementById('wordleAnswer').textContent = targetWord;
-                    document.getElementById('overWordle').className = 'game-over lose';
-                    document.getElementById('overWordle').style.display = 'block';
-                    playSound(300, 'sawtooth', 0.5);
-                }, 500);
+                streakWordle = 0;
+                document.getElementById('streakWordle').textContent = streakWordle;
+                document.getElementById('wordleMsg').textContent = targetWord;
+                document.getElementById('overWordle').style.display = 'block';
             }
             
             currentRow++;
             currentCol = 0;
         }
 
-        function giveHint() {
-            if (streakWordle > 0) {
-                streakWordle--;
-                document.getElementById('streakWordle').textContent = streakWordle;
-                // Reveal one correct letter
-                for (let c = 0; c < 5; c++) {
-                    if (gridWordle[currentRow][c] === '') {
-                        gridWordle[currentRow][c] = targetWord[c];
-                        currentCol = c + 1;
-                        renderWordle();
-                        break;
-                    }
-                }
-            }
-        }
-
-        document.addEventListener('keydown', e => {
-            if (document.getElementById('overWordle').style.display === 'block') return;
-            if (e.key === 'Enter') submitGuess();
-            else if (e.key === 'Backspace' && currentCol > 0) {
-                currentCol--;
-                gridWordle[currentRow][currentCol] = '';
-                renderWordle();
-            }
-            else if (/^[a-zA-Z]$/.test(e.key)) inputLetter(e.key.toUpperCase());
-        });
-
-        // ==================== GAME 5: MINESWEEPER ====================
+        // ==================== GAME 5: MINESWEEPER (Touch) ====================
         let minesGrid = [], minesRevealed = [], minesFlagged = [], minePositions = [];
         let minesWidth = 8, minesHeight = 8, minesCount = 10;
         let timerMines, timerMinesValue = 0, winsMines = 0;
-        let firstClick = true;
+        let firstClick = true, flagMode = false;
 
         function setMinesDifficulty(w, c) {
             minesWidth = w;
@@ -2090,6 +1501,8 @@
             timerMinesValue = 0;
             document.getElementById('timerMines').textContent = '0';
             firstClick = true;
+            flagMode = false;
+            document.getElementById('flagBtn').textContent = '🚩 Flag: OFF';
             
             minesGrid = Array(minesHeight).fill().map(() => Array(minesWidth).fill(0));
             minesRevealed = Array(minesHeight).fill().map(() => Array(minesWidth).fill(false));
@@ -2102,6 +1515,11 @@
             document.getElementById('mineCount').textContent = minesCount;
             document.getElementById('overMines').style.display = 'none';
             renderMines();
+        }
+
+        function setFlagMode() {
+            flagMode = !flagMode;
+            document.getElementById('flagBtn').textContent = flagMode ? '🚩 Flag: ON' : '🚩 Flag: OFF';
         }
 
         function placeMines(excludeR, excludeC) {
@@ -2146,17 +1564,30 @@
                             cell.textContent = '💣';
                         } else if (minesGrid[r][c] > 0) {
                             cell.textContent = minesGrid[r][c];
-                            const colors = ['', '#2979ff', '#00c853', '#ff1744', '#aa00ff', '#ff6d00', '#00b8d4', '#000', '#757575'];
-                            cell.style.color = colors[minesGrid[r][c]];
                         }
                     } else if (minesFlagged[r][c]) {
                         cell.classList.add('flagged');
                         cell.textContent = '🚩';
                     }
-                    cell.oncontextmenu = (e) => { e.preventDefault(); flagCell(r, c); };
-                    cell.onclick = () => revealCell(r, c);
+                    cell.ontouchstart = (e) => handleMineTouch(r, c, e);
                     grid.appendChild(cell);
                 }
+            }
+        }
+
+        function handleMineTouch(r, c, e) {
+            e.preventDefault();
+            createTouchFeedback(e.touches[0].clientX, e.touches[0].clientY);
+            
+            if (flagMode) {
+                if (!minesRevealed[r][c]) {
+                    minesFlagged[r][c] = !minesFlagged[r][c];
+                    const flagged = minesFlagged.flat().filter(f => f).length;
+                    document.getElementById('mineCount').textContent = minesCount - flagged;
+                    renderMines();
+                }
+            } else {
+                revealCell(r, c);
             }
         }
 
@@ -2173,7 +1604,6 @@
             }
             
             minesRevealed[r][c] = true;
-            playSound(400, 'sine', 0.05);
             
             if (minesGrid[r][c] === -1) {
                 gameOverMines(false);
@@ -2188,16 +1618,6 @@
             
             checkWinMines();
             renderMines();
-        }
-
-        function flagCell(r, c) {
-            if (!minesRevealed[r][c]) {
-                minesFlagged[r][c] = !minesFlagged[r][c];
-                const flagged = minesFlagged.flat().filter(f => f).length;
-                document.getElementById('mineCount').textContent = minesCount - flagged;
-                playSound(300, 'sine', 0.05);
-                renderMines();
-            }
         }
 
         function checkWinMines() {
@@ -2216,7 +1636,6 @@
             renderMines();
             
             const over = document.getElementById('overMines');
-            over.className = won ? 'game-over win' : 'game-over lose';
             document.getElementById('minesTitle').textContent = won ? 'Victory!' : 'BOOM!';
             document.getElementById('minesMsg').textContent = `Time: ${timerMinesValue}s`;
             over.style.display = 'block';
@@ -2224,26 +1643,10 @@
             if (won) {
                 winsMines++;
                 document.getElementById('winsMines').textContent = winsMines;
-                playSound(800, 'sine', 0.3);
-                createParticles(150, 150, '#00ff88', 20);
-            } else {
-                playSound(200, 'sawtooth', 0.5);
             }
         }
 
-        function autoSolveMines() {
-            // Simple auto-solver: reveal all safe cells
-            for (let r = 0; r < minesHeight; r++) {
-                for (let c = 0; c < minesWidth; c++) {
-                    if (!minesRevealed[r][c] && minesGrid[r][c] !== -1) {
-                        revealCell(r, c);
-                        return;
-                    }
-                }
-            }
-        }
-
-        // ==================== GAME 6: FLAPPY BIRD ====================
+        // ==================== GAME 6: FLAPPY BIRD (Tap) ====================
         let flappyY = 100, flappyVel = 0, flappyScore = 0, bestFlappy = 0;
         let flappyInterval, flappyRunning = false;
         let pipes = [], pipeTimer = 0;
@@ -2260,41 +1663,41 @@
             document.querySelectorAll('.flappy-pipe').forEach(p => p.remove());
         }
 
-        function flappyJump() {
+        function flappyJump(e) {
+            if (e) {
+                e.preventDefault();
+                createTouchFeedback(e.touches[0].clientX, e.touches[0].clientY);
+            }
             if (!flappyRunning) {
                 toggleFlappy();
                 return;
             }
             flappyVel = -10;
-            playSound(600, 'sine', 0.1);
         }
 
         function updateFlappy() {
-            flappyVel += 0.6;
+            flappyVel += 0.5;
             flappyY += flappyVel;
 
             const bird = document.getElementById('flappyBird');
             bird.style.top = flappyY + 'px';
             bird.style.transform = `rotate(${Math.min(flappyVel * 3, 90)}deg)`;
 
-            // Spawn pipes
             pipeTimer++;
-            if (pipeTimer > 120) {
+            if (pipeTimer > 100) {
                 createPipe();
                 pipeTimer = 0;
             }
 
-            // Update pipes
             pipes.forEach((pipe, i) => {
                 pipe.x -= 3;
                 pipe.topEl.style.right = (320 - pipe.x) + 'px';
                 pipe.bottomEl.style.right = (320 - pipe.x) + 'px';
 
-                if (!pipe.passed && pipe.x < 50) {
+                if (!pipe.passed && pipe.x < 55) {
                     flappyScore++;
                     document.getElementById('scoreFlappy').textContent = flappyScore;
                     pipe.passed = true;
-                    playSound(800, 'sine', 0.05);
                 }
 
                 if (pipe.x < -60) {
@@ -2303,31 +1706,28 @@
                     pipes.splice(i, 1);
                 }
 
-                // Collision
                 if (50 < pipe.x + 50 && 85 > pipe.x) {
-                    if (flappyY < pipe.gapY || flappyY + 35 > pipe.gapY + 100) {
+                    if (flappyY < pipe.gapY || flappyY + 30 > pipe.gapY + 90) {
                         gameOverFlappy();
                     }
                 }
             });
 
-            if (flappyY > 205 || flappyY < -35) gameOverFlappy();
+            if (flappyY > 220 || flappyY < -30) gameOverFlappy();
         }
 
         function createPipe() {
-            const gapY = Math.random() * 100 + 40;
+            const gapY = Math.random() * 80 + 50;
             const topHeight = gapY;
-            const bottomHeight = 240 - gapY - 100;
+            const bottomHeight = 250 - gapY - 90;
 
             const topPipe = document.createElement('div');
             topPipe.className = 'flappy-pipe';
-            topPipe.style.height = topHeight + 'px';
-            topPipe.style.top = '0';
+            topPipe.style.cssText = `height: ${topHeight}px; top: 0; width: 50px; background: linear-gradient(to right, #4caf50, #2e7d32); position: absolute; right: -50px;`;
             
             const bottomPipe = document.createElement('div');
             bottomPipe.className = 'flappy-pipe';
-            bottomPipe.style.height = bottomHeight + 'px';
-            bottomPipe.style.bottom = '0';
+            bottomPipe.style.cssText = `height: ${bottomHeight}px; bottom: 0; width: 50px; background: linear-gradient(to right, #4caf50, #2e7d32); position: absolute; right: -50px;`;
 
             document.getElementById('flappyContainer').appendChild(topPipe);
             document.getElementById('flappyContainer').appendChild(bottomPipe);
@@ -2347,12 +1747,10 @@
             document.getElementById('btnFlappy').textContent = '▶️ Start';
             document.getElementById('finalFlappy').textContent = flappyScore;
             document.getElementById('overFlappy').style.display = 'block';
-            
             if (flappyScore > bestFlappy) {
                 bestFlappy = flappyScore;
                 document.getElementById('bestFlappy').textContent = bestFlappy;
             }
-            playSound(200, 'sawtooth', 0.5);
         }
 
         function toggleFlappy() {
@@ -2367,14 +1765,7 @@
             }
         }
 
-        document.addEventListener('keydown', e => {
-            if (e.code === 'Space') {
-                e.preventDefault();
-                flappyJump();
-            }
-        });
-
-        // ==================== GAME 7: CHESS ====================
+        // ==================== GAME 7: CHESS (Touch) ====================
         const chessPieces = {
             'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚', 'p': '♟',
             'R': '♖', 'N': '♘', 'B': '♗', 'Q': '♕', 'K': '♔', 'P': '♙'
@@ -2401,7 +1792,7 @@
             whiteKingPos = {r: 7, c: 4};
             blackKingPos = {r: 0, c: 4};
             document.getElementById('chessTurn').textContent = 'White';
-            document.getElementById('chessStatus').textContent = 'Select a piece';
+            document.getElementById('chessStatus').textContent = 'Select piece';
             document.getElementById('overChess').style.display = 'none';
             renderChess();
         }
@@ -2420,17 +1811,14 @@
                         cell.classList.add('selected');
                     }
                     
-                    // Show valid moves
                     if (selectedCell && isValidMove(selectedCell.r, selectedCell.c, r, c)) {
                         cell.classList.add('valid-move');
                     }
                     
-                    // Highlight king in check
-                    if (piece.toLowerCase() === 'k' && isInCheck(piece === piece.toUpperCase() ? 'white' : 'black')) {
-                        cell.classList.add('check');
-                    }
-                    
-                    cell.onclick = () => handleChessClick(r, c);
+                    cell.ontouchstart = (e) => {
+                        e.preventDefault();
+                        handleChessClick(r, c);
+                    };
                     board.appendChild(cell);
                 }
             }
@@ -2449,7 +1837,6 @@
                 }
             } else {
                 if (isValidMove(selectedCell.r, selectedCell.c, r, c)) {
-                    // Save for undo
                     moveHistory.push({
                         board: chessBoard.map(row => [...row]),
                         turn: currentTurn,
@@ -2457,36 +1844,27 @@
                         blackKing: {...blackKingPos}
                     });
                     
-                    // Move piece
                     const movingPiece = chessBoard[selectedCell.r][selectedCell.c];
                     chessBoard[r][c] = movingPiece;
                     chessBoard[selectedCell.r][selectedCell.c] = '.';
                     
-                    // Update king position
                     if (movingPiece.toLowerCase() === 'k') {
                         if (currentTurn === 'white') whiteKingPos = {r, c};
                         else blackKingPos = {r, c};
                     }
                     
-                    // Pawn promotion
                     if (movingPiece.toLowerCase() === 'p' && (r === 0 || r === 7)) {
                         chessBoard[r][c] = currentTurn === 'white' ? 'Q' : 'q';
                     }
                     
-                    playSound(400, 'sine', 0.1);
                     currentTurn = currentTurn === 'white' ? 'black' : 'white';
                     document.getElementById('chessTurn').textContent = currentTurn === 'white' ? 'White' : 'Black';
-                    document.getElementById('chessStatus').textContent = 'Select a piece';
+                    document.getElementById('chessStatus').textContent = 'Select piece';
                     
-                    // Check for checkmate
                     if (isCheckmate(currentTurn)) {
                         document.getElementById('chessResult').textContent = 'Checkmate!';
                         document.getElementById('chessWinner').textContent = (currentTurn === 'white' ? 'Black' : 'White') + ' Wins!';
                         document.getElementById('overChess').style.display = 'block';
-                        playSound(800, 'sine', 0.5);
-                    } else if (isInCheck(currentTurn)) {
-                        document.getElementById('chessStatus').textContent = 'Check!';
-                        playSound(600, 'square', 0.2);
                     }
                     
                     selectedCell = null;
@@ -2497,7 +1875,7 @@
                     }
                 } else {
                     selectedCell = null;
-                    document.getElementById('chessStatus').textContent = 'Select a piece';
+                    document.getElementById('chessStatus').textContent = 'Select piece';
                     renderChess();
                 }
             }
@@ -2510,7 +1888,6 @@
             const dc = toC - fromC;
             const type = piece.toLowerCase();
             
-            // Can't capture own piece
             if (target !== '.' && 
                 ((piece === piece.toUpperCase() && target === target.toUpperCase()) ||
                  (piece === piece.toLowerCase() && target === target.toLowerCase()))) {
@@ -2536,7 +1913,6 @@
             
             if (!valid) return false;
             
-            // Check if move puts own king in check
             const tempBoard = chessBoard.map(r => [...r]);
             tempBoard[toR][toC] = tempBoard[fromR][fromC];
             tempBoard[fromR][fromC] = '.';
@@ -2603,14 +1979,8 @@
             return true;
         }
 
-        function isInCheck(color) {
-            const kingPos = color === 'white' ? whiteKingPos : blackKingPos;
-            return isSquareAttacked(kingPos.r, kingPos.c, color === 'white' ? 'black' : 'white');
-        }
-
         function isCheckmate(color) {
             if (!isInCheck(color)) return false;
-            
             for (let fromR = 0; fromR < 8; fromR++) {
                 for (let fromC = 0; fromC < 8; fromC++) {
                     const piece = chessBoard[fromR][fromC];
@@ -2628,6 +1998,11 @@
             return true;
         }
 
+        function isInCheck(color) {
+            const kingPos = color === 'white' ? whiteKingPos : blackKingPos;
+            return isSquareAttacked(kingPos.r, kingPos.c, color === 'white' ? 'black' : 'white');
+        }
+
         function undoChess() {
             if (moveHistory.length) {
                 const prev = moveHistory.pop();
@@ -2643,7 +2018,7 @@
 
         function toggleAIChess() {
             aiEnabled = !aiEnabled;
-            document.getElementById('btnAIChess').textContent = aiEnabled ? '🤖 vs AI: ON' : '🤖 vs AI: OFF';
+            document.getElementById('btnAIChess').textContent = aiEnabled ? '🤖 AI: ON' : '🤖 AI: OFF';
             if (aiEnabled && currentTurn === 'black') makeAIMove();
         }
 
@@ -2665,7 +2040,6 @@
             }
             
             if (moves.length) {
-                // Prioritize captures
                 moves.sort((a, b) => {
                     const valA = chessBoard[a.toR][a.toC] !== '.' ? 1 : 0;
                     const valB = chessBoard[b.toR][b.toC] !== '.' ? 1 : 0;
@@ -2690,7 +2064,7 @@
             }
         }
 
-        // ==================== GAME 8: SUDOKU ====================
+        // ==================== GAME 8: SUDOKU (Virtual Numpad) ====================
         let sudokuGrid = [], sudokuSolution = [], selectedSudoku = null;
         let sudokuDifficulty = 30, solvedSudoku = 0;
 
@@ -2716,9 +2090,10 @@
             }
             
             document.getElementById('overSudoku').style.display = 'none';
-            document.getElementById('sudokuStatus').textContent = 'Select a cell';
+            document.getElementById('sudokuStatus').textContent = 'Select cell';
             selectedSudoku = null;
             renderSudoku();
+            createSudokuKeyboard();
         }
 
         function generateSudoku() {
@@ -2768,14 +2143,12 @@
                     cell.className = 'sudoku-cell';
                     if (sudokuGrid[r][c] !== 0) {
                         cell.textContent = sudokuGrid[r][c];
-                        if (sudokuSolution[r][c] === sudokuGrid[r][c] && sudokuGrid[r][c] !== 0) {
-                            cell.classList.add('fixed');
-                        }
+                        if (sudokuSolution[r][c] === sudokuGrid[r][c]) cell.classList.add('fixed');
                     }
                     if (selectedSudoku && selectedSudoku.r === r && selectedSudoku.c === c) {
                         cell.classList.add('selected');
                     }
-                    cell.onclick = () => {
+                    cell.ontouchstart = () => {
                         selectedSudoku = {r, c};
                         renderSudoku();
                     };
@@ -2784,13 +2157,32 @@
             }
         }
 
-        function hintSudoku() {
+        function createSudokuKeyboard() {
+            const kb = document.getElementById('sudokuKeyboard');
+            kb.innerHTML = '';
+            const row = document.createElement('div');
+            row.className = 'keyboard-row';
+            for (let i = 1; i <= 9; i++) {
+                const key = document.createElement('button');
+                key.className = 'vkey';
+                key.textContent = i;
+                key.ontouchstart = () => inputSudokuNumber(i);
+                row.appendChild(key);
+            }
+            const clear = document.createElement('button');
+            clear.className = 'vkey wide';
+            clear.textContent = 'Clear';
+            clear.ontouchstart = () => inputSudokuNumber(0);
+            row.appendChild(clear);
+            kb.appendChild(row);
+        }
+
+        function inputSudokuNumber(num) {
             if (!selectedSudoku) return;
             const {r, c} = selectedSudoku;
-            if (sudokuGrid[r][c] === 0) {
-                sudokuGrid[r][c] = sudokuSolution[r][c];
+            if (sudokuSolution[r][c] !== sudokuGrid[r][c] || num === 0) {
+                sudokuGrid[r][c] = num;
                 renderSudoku();
-                playSound(600, 'sine', 0.1);
                 checkWinSudoku();
             }
         }
@@ -2804,8 +2196,6 @@
             solvedSudoku++;
             document.getElementById('solvedSudoku').textContent = solvedSudoku;
             document.getElementById('overSudoku').style.display = 'block';
-            playSound(800, 'sine', 0.3);
-            createParticles(180, 180, '#00ff88', 20);
         }
 
         function solveSudoku() {
@@ -2814,32 +2204,21 @@
             checkWinSudoku();
         }
 
-        document.addEventListener('keydown', e => {
+        function hintSudoku() {
             if (!selectedSudoku) return;
-            const num = parseInt(e.key);
             const {r, c} = selectedSudoku;
-            
-            if (num >= 0 && num <= 9) {
-                if (sudokuSolution[r][c] !== sudokuGrid[r][c] || num === 0) {
-                    sudokuGrid[r][c] = num;
-                    if (num !== 0 && num !== sudokuSolution[r][c]) {
-                        document.getElementById('sudokuStatus').textContent = 'Incorrect!';
-                        playSound(300, 'sawtooth', 0.1);
-                    } else {
-                        document.getElementById('sudokuStatus').textContent = 'Good!';
-                        if (num !== 0) playSound(500, 'sine', 0.1);
-                    }
-                    renderSudoku();
-                    if (num !== 0) checkWinSudoku();
-                }
+            if (sudokuGrid[r][c] === 0) {
+                sudokuGrid[r][c] = sudokuSolution[r][c];
+                renderSudoku();
+                checkWinSudoku();
             }
-        });
+        }
 
-        // ==================== GAME 9: PLATFORMER ====================
+        // ==================== GAME 9: PLATFORMER (Touch D-Pad) ====================
         let platX = 50, platY = 100, platVelX = 0, platVelY = 0;
         let platRunning = false, platScore = 0, platInterval, levelPlatformer = 1;
         let coins = [], platforms = [];
-        const gravity = 0.5, jumpPower = -12, speed = 6;
+        let platMoveDir = 0;
 
         function initPlatformer() {
             platX = 50;
@@ -2847,10 +2226,10 @@
             platVelX = 0;
             platVelY = 0;
             platScore = 0;
+            platMoveDir = 0;
             coins = [];
-            platforms = [{x: 0, y: 180, w: 320, h: 60}];
+            platforms = [{x: 0, y: 160, w: 350, h: 40}];
             
-            // Generate level
             generateLevel();
             
             document.getElementById('scorePlatformer').textContent = '0';
@@ -2861,10 +2240,8 @@
 
         function generateLevel() {
             const canvas = document.getElementById('platformerCanvas');
-            // Clear old coins
             document.querySelectorAll('.platformer-coin').forEach(c => c.remove());
             
-            // Add platforms
             for (let i = 0; i < 3 + levelPlatformer; i++) {
                 platforms.push({
                     x: 100 + i * 80,
@@ -2874,7 +2251,6 @@
                 });
             }
             
-            // Add coins
             for (let i = 0; i < 3 + Math.floor(levelPlatformer / 2); i++) {
                 const coin = document.createElement('div');
                 coin.className = 'platformer-coin';
@@ -2892,11 +2268,11 @@
         }
 
         function updatePlatformer() {
-            platVelY += gravity;
+            platVelY += 0.6;
+            platVelX = platMoveDir * 5;
             platX += platVelX;
             platY += platVelY;
 
-            // Platform collision
             let onGround = false;
             platforms.forEach(plat => {
                 if (platX + 35 > plat.x && platX < plat.x + plat.w &&
@@ -2907,14 +2283,14 @@
                 }
             });
 
-            // Fall off screen
             if (platY < -50) {
                 platX = 50;
                 platY = 100;
                 platVelY = 0;
             }
+            if (platX < 0) platX = 0;
+            if (platX > 315) platX = 315;
 
-            // Collect coins
             coins.forEach(coin => {
                 if (!coin.collected && 
                     platX < coin.x + 25 && platX + 35 > coin.x &&
@@ -2923,17 +2299,28 @@
                     coin.el.style.display = 'none';
                     platScore += 10;
                     document.getElementById('scorePlatformer').textContent = platScore;
-                    playSound(700, 'sine', 0.1);
-                    createParticles(coin.x, coin.y, '#ffd700', 8);
                 }
             });
 
-            // Level complete
             if (platX > 300 && coins.every(c => c.collected)) {
                 levelComplete();
             }
 
             renderPlatformer();
+        }
+
+        function platMove(dir) {
+            platMoveDir = dir;
+        }
+
+        function platStop() {
+            platMoveDir = 0;
+        }
+
+        function platJump() {
+            if (platVelY === 0) {
+                platVelY = -12;
+            }
         }
 
         function levelComplete() {
@@ -2942,7 +2329,6 @@
             document.getElementById('btnPlatformer').textContent = '▶️ Start';
             document.getElementById('finalPlatformer').textContent = platScore;
             document.getElementById('overPlatformer').style.display = 'block';
-            playSound(800, 'sine', 0.3);
         }
 
         function nextLevelPlatformer() {
@@ -2963,20 +2349,7 @@
             }
         }
 
-        document.addEventListener('keydown', e => {
-            if (e.key === 'ArrowLeft') platVelX = -speed;
-            if (e.key === 'ArrowRight') platVelX = speed;
-            if ((e.key === ' ' || e.key === 'ArrowUp') && platVelY === 0) {
-                platVelY = jumpPower;
-                playSound(400, 'sine', 0.1);
-            }
-        });
-
-        document.addEventListener('keyup', e => {
-            if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') platVelX = 0;
-        });
-
-        // ==================== GAME 10: TOWER DEFENSE ====================
+        // ==================== GAME 10: TOWER DEFENSE (Touch) ====================
         let tdGold = 100, tdLives = 20, tdWave = 0, tdRunning = false;
         let tdTowers = [], tdEnemies = [], tdProjectiles = [];
         let tdInterval, tdSpawnInterval;
@@ -2996,20 +2369,18 @@
             document.getElementById('waveTD').textContent = tdWave;
             document.getElementById('overTD').style.display = 'none';
             document.getElementById('tdCanvas').innerHTML = '<div class="td-path"></div>';
-            document.getElementById('btnTD').textContent = '▶️ Start Wave';
+            document.getElementById('btnTD').textContent = '▶️ Wave';
         }
 
         function placeTower(e) {
-            if (tdGold < 50) {
-                playSound(200, 'sawtooth', 0.1);
-                return;
-            }
+            e.preventDefault();
+            if (tdGold < 50) return;
             
             const rect = e.currentTarget.getBoundingClientRect();
-            const x = e.clientX - rect.left - 17;
-            const y = e.clientY - rect.top - 17;
+            const x = e.touches[0].clientX - rect.left - 17;
+            const y = e.touches[0].clientY - rect.top - 17;
             
-            if (x > 110 && x < 190) return; // Don't place on path
+            if (x > 110 && x < 190) return;
 
             const tower = document.createElement('div');
             tower.className = 'td-tower';
@@ -3030,8 +2401,7 @@
             
             tdGold -= 50;
             document.getElementById('goldTD').textContent = tdGold;
-            playSound(500, 'sine', 0.1);
-            createParticles(x + 17, y + 17, '#00f3ff', 10);
+            createTouchFeedback(e.touches[0].clientX, e.touches[0].clientY);
         }
 
         function upgradeTowers() {
@@ -3042,9 +2412,7 @@
                     tower.range += 20;
                     tower.damage += 1;
                     tower.element.style.transform = 'scale(1.2)';
-                    tower.element.style.boxShadow = '0 0 30px rgba(0, 243, 255, 0.8)';
                 });
-                playSound(600, 'sine', 0.2);
             }
         }
 
@@ -3053,7 +2421,7 @@
             tdRunning = true;
             tdWave++;
             document.getElementById('waveTD').textContent = tdWave;
-            document.getElementById('btnTD').textContent = 'Wave ' + tdWave + '...';
+            document.getElementById('btnTD').textContent = 'Wave ' + tdWave;
             
             let spawned = 0;
             const toSpawn = 5 + tdWave * 2;
@@ -3089,18 +2457,15 @@
         }
 
         function updateTD() {
-            // Update enemies
             tdEnemies.forEach((enemy, i) => {
                 enemy.y += enemy.speed;
                 enemy.element.style.top = enemy.y + 'px';
                 
-                // Tower attacks
                 tdTowers.forEach(tower => {
                     if (tower.cooldown > 0) tower.cooldown--;
                     
                     const dist = Math.hypot(tower.x - enemy.x, tower.y - enemy.y);
                     if (dist < tower.range && tower.cooldown <= 0) {
-                        // Create projectile
                         const proj = document.createElement('div');
                         proj.className = 'td-projectile';
                         proj.style.left = tower.x + 'px';
@@ -3119,19 +2484,16 @@
                     }
                 });
 
-                // Enemy reached bottom
                 if (enemy.y > 240) {
                     enemy.element.remove();
                     tdEnemies.splice(i, 1);
                     tdLives--;
                     document.getElementById('livesTD').textContent = tdLives;
-                    playSound(300, 'sawtooth', 0.1);
                     
                     if (tdLives <= 0) gameOverTD();
                 }
             });
 
-            // Update projectiles
             tdProjectiles.forEach((proj, i) => {
                 if (!proj.target || !tdEnemies.includes(proj.target)) {
                     proj.element.remove();
@@ -3155,8 +2517,6 @@
                             tdEnemies.splice(idx, 1);
                             tdGold += proj.target.value;
                             document.getElementById('goldTD').textContent = tdGold;
-                            playSound(600, 'sine', 0.1);
-                            createParticles(proj.target.x, proj.target.y, '#ff1744', 8);
                         }
                     }
                 } else {
@@ -3167,11 +2527,10 @@
                 }
             });
 
-            // Wave complete
             if (tdEnemies.length === 0 && !tdSpawnInterval) {
                 tdRunning = false;
-                document.getElementById('btnTD').textContent = '▶️ Start Wave ' + (tdWave + 1);
-                tdGold += 50; // Wave bonus
+                document.getElementById('btnTD').textContent = '▶️ Wave ' + (tdWave + 1);
+                tdGold += 50;
                 document.getElementById('goldTD').textContent = tdGold;
             }
         }
@@ -3182,14 +2541,13 @@
             tdRunning = false;
             document.getElementById('finalWaveTD').textContent = tdWave;
             document.getElementById('overTD').style.display = 'block';
-            playSound(200, 'sawtooth', 0.5);
         }
 
         // ==================== INITIALIZATION ====================
         window.onload = () => {
             setTimeout(() => {
-                document.getElementById('loading').classList.add('hidden');
-            }, 1000);
+                document.querySelector('.loading')?.remove();
+            }, 500);
             
             init2048();
             initSnake();
@@ -3201,18 +2559,7 @@
             initSudoku();
             initPlatformer();
             initTD();
-            
-            // Try to load saved data
-            const saved = localStorage.getItem(STORAGE_KEY);
-            if (saved) {
-                showNotification('Save data found! Click Load All to restore.');
-            }
         };
-
-        // Auto-save every 30 seconds
-        setInterval(() => {
-            if (globalStats.gamesPlayed > 0) saveAllGames();
-        }, 30000);
     </script>
 </body>
 </html>
