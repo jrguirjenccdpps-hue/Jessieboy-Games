@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium HTML5 Game Collection</title>
+    <title>NEON ARCADE | Strategic Edition</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap');
         
@@ -31,11 +31,9 @@
             overflow-x: hidden;
             background-image: 
                 radial-gradient(circle at 20% 50%, rgba(0, 243, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(255, 0, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 20%, rgba(0, 255, 136, 0.05) 0%, transparent 50%);
+                radial-gradient(circle at 80% 80%, rgba(255, 0, 255, 0.1) 0%, transparent 50%);
         }
 
-        /* Animated Background Grid */
         .bg-grid {
             position: fixed;
             top: 0;
@@ -57,7 +55,7 @@
         }
 
         .container {
-            max-width: 1600px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -94,35 +92,72 @@
             letter-spacing: 2px;
         }
 
-        .stats-bar {
+        /* Tabs Navigation */
+        .tabs-container {
             display: flex;
             justify-content: center;
-            gap: 30px;
-            margin: 20px 0;
+            gap: 10px;
+            margin: 30px 0;
             flex-wrap: wrap;
+            padding: 0 20px;
         }
 
-        .stat-item {
+        .tab-btn {
             background: var(--panel-bg);
-            padding: 10px 20px;
-            border-radius: 20px;
             border: 1px solid var(--glass-border);
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            color: #fff;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
             font-size: 0.9em;
         }
 
-        .stat-icon {
-            font-size: 1.2em;
+        .tab-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
         }
 
-        .games-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 30px;
-            margin-top: 30px;
+        .tab-btn:hover::before {
+            left: 100%;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, rgba(0, 243, 255, 0.3), rgba(255, 0, 255, 0.3));
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.3);
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 243, 255, 0.2);
+        }
+
+        /* Game Display Area */
+        .game-display {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .game-display.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .game-card {
@@ -131,9 +166,9 @@
             overflow: hidden;
             border: 1px solid var(--glass-border);
             backdrop-filter: blur(20px);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
             box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         .game-card::before {
@@ -144,17 +179,6 @@
             right: 0;
             height: 3px;
             background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink), var(--neon-green));
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .game-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 60px rgba(0, 243, 255, 0.2);
-        }
-
-        .game-card:hover::before {
-            opacity: 1;
         }
 
         .game-header {
@@ -168,7 +192,7 @@
 
         .game-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.4em;
+            font-size: 1.8em;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -187,8 +211,8 @@
         }
 
         .game-container {
-            padding: 20px;
-            min-height: 350px;
+            padding: 30px;
+            min-height: 400px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -223,27 +247,28 @@
             z-index: 10;
         }
 
-        /* Enhanced 2048 */
+        /* Game Specific Styles */
+        /* 2048 */
         .grid-2048 {
             display: grid;
-            grid-template-columns: repeat(4, 70px);
-            gap: 10px;
+            grid-template-columns: repeat(4, 80px);
+            gap: 12px;
             background: linear-gradient(135deg, #1a1a2e, #16213e);
-            padding: 15px;
+            padding: 20px;
             border-radius: 15px;
             box-shadow: inset 0 4px 20px rgba(0,0,0,0.5);
         }
 
         .tile-2048 {
-            width: 70px;
-            height: 70px;
+            width: 80px;
+            height: 80px;
             background: rgba(255,255,255,0.05);
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.8em;
+            font-size: 2em;
             font-weight: 700;
             color: #fff;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -279,7 +304,7 @@
         .tile-2048[data-value="128"] { 
             background: linear-gradient(135deg, #edcf72, #edcc61); 
             box-shadow: 0 0 40px rgba(237, 207, 114, 0.8);
-            font-size: 1.5em;
+            font-size: 1.6em;
         }
         .tile-2048[data-value="256"] { 
             background: linear-gradient(135deg, #edcc61, #edc850); 
@@ -293,13 +318,13 @@
         .tile-2048[data-value="1024"] { 
             background: linear-gradient(135deg, #edc53f, #edc22e); 
             box-shadow: 0 0 55px rgba(237, 197, 46, 1);
-            font-size: 1.2em;
+            font-size: 1.3em;
         }
         .tile-2048[data-value="2048"] { 
             background: linear-gradient(135deg, #edc22e, #ff6b6b, #4ecdc4); 
             box-shadow: 0 0 60px rgba(255, 107, 107, 1);
             animation: rainbow 2s linear infinite;
-            font-size: 1.2em;
+            font-size: 1.3em;
         }
 
         @keyframes pulseTile {
@@ -312,10 +337,10 @@
             100% { filter: hue-rotate(360deg); }
         }
 
-        /* Enhanced Snake */
+        /* Snake */
         .snake-grid {
             display: grid;
-            grid-template-columns: repeat(15, 22px);
+            grid-template-columns: repeat(15, 25px);
             gap: 2px;
             background: linear-gradient(135deg, #0d2818, #1a4d2e);
             padding: 10px;
@@ -324,8 +349,8 @@
         }
 
         .snake-cell {
-            width: 22px;
-            height: 22px;
+            width: 25px;
+            height: 25px;
             background: rgba(0,0,0,0.3);
             border-radius: 4px;
             transition: all 0.1s;
@@ -360,10 +385,10 @@
             50% { transform: scale(1.2); }
         }
 
-        /* Enhanced Tetris */
+        /* Tetris */
         .tetris-board {
             display: grid;
-            grid-template-columns: repeat(10, 28px);
+            grid-template-columns: repeat(10, 30px);
             gap: 2px;
             background: #000;
             padding: 8px;
@@ -373,8 +398,8 @@
         }
 
         .tetris-cell {
-            width: 28px;
-            height: 28px;
+            width: 30px;
+            height: 30px;
             background: #111;
             border: 1px solid #222;
             border-radius: 3px;
@@ -417,24 +442,24 @@
             border-color: #ff9100;
         }
 
-        /* Enhanced Wordle */
+        /* Wordle */
         .wordle-grid {
             display: grid;
-            grid-template-columns: repeat(5, 60px);
+            grid-template-columns: repeat(5, 65px);
             gap: 8px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .wordle-cell {
-            width: 60px;
-            height: 60px;
+            width: 65px;
+            height: 65px;
             border: 2px solid #3a3a3c;
             background: rgba(0,0,0,0.5);
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.8em;
+            font-size: 2em;
             font-weight: 700;
             text-transform: uppercase;
             color: #fff;
@@ -481,15 +506,15 @@
         }
 
         .wordle-key {
-            min-width: 35px;
-            height: 45px;
+            min-width: 40px;
+            height: 50px;
             background: linear-gradient(135deg, #818384, #6a6b6c);
             border: none;
             border-radius: 6px;
             color: #fff;
             font-family: 'Rajdhani', sans-serif;
             font-weight: 700;
-            font-size: 1em;
+            font-size: 1.1em;
             cursor: pointer;
             transition: all 0.2s;
             box-shadow: 0 4px 0 #565758;
@@ -500,138 +525,10 @@
             box-shadow: 0 0 0 #565758;
         }
 
-        /* Enhanced Minesweeper */
-        .mines-grid {
-            display: grid;
-            grid-template-columns: repeat(8, 35px);
-            gap: 2px;
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
-            padding: 10px;
-            border-radius: 10px;
-            box-shadow: inset 0 4px 20px rgba(0,0,0,0.5);
-        }
-
-        .mine-cell {
-            width: 35px;
-            height: 35px;
-            background: linear-gradient(135deg, #4a4a6a, #3a3a5a);
-            border: none;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 4px 0 #2a2a4a, 0 4px 10px rgba(0,0,0,0.3);
-            color: #fff;
-            font-size: 1em;
-        }
-
-        .mine-cell:active:not(.revealed) {
-            transform: translateY(4px);
-            box-shadow: 0 0 0 #2a2a4a, inset 0 2px 5px rgba(0,0,0,0.3);
-        }
-
-        .mine-cell.revealed {
-            background: linear-gradient(135deg, #2a2a4a, #1a1a3a);
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
-            transform: translateY(2px);
-        }
-
-        .mine-cell.mine { 
-            background: linear-gradient(135deg, #ff1744, #d50000) !important; 
-            animation: explode 0.5s ease-out;
-        }
-
-        @keyframes explode {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.3); }
-            100% { transform: scale(1); }
-        }
-
-        .mine-cell.flagged {
-            background: linear-gradient(135deg, #ff9100, #ff6d00) !important;
-        }
-
-        /* Enhanced Flappy Bird */
-        .flappy-container {
-            width: 320px;
-            height: 240px;
-            background: linear-gradient(to bottom, #4fc3f7 0%, #81d4fa 50%, #8bc34a 50%, #689f38 100%);
-            position: relative;
-            overflow: hidden;
-            border-radius: 15px;
-            cursor: pointer;
-            box-shadow: inset 0 0 50px rgba(0,0,0,0.2);
-        }
-
-        .flappy-bird {
-            width: 35px;
-            height: 35px;
-            background: linear-gradient(135deg, #ffeb3b, #fbc02d);
-            border-radius: 50%;
-            position: absolute;
-            left: 50px;
-            border: 2px solid #f57f17;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3), inset -5px -5px 10px rgba(0,0,0,0.1);
-            transition: transform 0.1s;
-            z-index: 10;
-        }
-
-        .flappy-bird::before {
-            content: '';
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            background: #fff;
-            border-radius: 50%;
-            top: 8px;
-            right: 8px;
-            border: 2px solid #333;
-        }
-
-        .flappy-bird::after {
-            content: '';
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            background: #333;
-            border-radius: 50%;
-            top: 11px;
-            right: 11px;
-        }
-
-        .flappy-wing {
-            position: absolute;
-            width: 20px;
-            height: 15px;
-            background: #ff9800;
-            border-radius: 50%;
-            left: -10px;
-            top: 10px;
-            animation: wingFlap 0.2s infinite alternate;
-        }
-
-        @keyframes wingFlap {
-            from { transform: rotate(-20deg); }
-            to { transform: rotate(20deg); }
-        }
-
-        .flappy-pipe {
-            width: 50px;
-            background: linear-gradient(to right, #4caf50, #2e7d32, #4caf50);
-            position: absolute;
-            right: -50px;
-            border: 2px solid #1b5e20;
-            box-shadow: 0 0 10px rgba(0,0,0,0.3);
-        }
-
-        /* Enhanced Chess */
+        /* Chess */
         .chess-board {
             display: grid;
-            grid-template-columns: repeat(8, 45px);
+            grid-template-columns: repeat(8, 55px);
             gap: 0;
             border: 4px solid #8b4513;
             border-radius: 5px;
@@ -640,12 +537,12 @@
         }
 
         .chess-cell {
-            width: 45px;
-            height: 45px;
+            width: 55px;
+            height: 55px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.2em;
+            font-size: 2.5em;
             cursor: pointer;
             transition: all 0.3s;
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
@@ -677,10 +574,10 @@
             background: radial-gradient(circle, rgba(255,0,0,0.6), transparent) !important;
         }
 
-        /* Enhanced Sudoku */
+        /* Sudoku */
         .sudoku-grid {
             display: grid;
-            grid-template-columns: repeat(9, 40px);
+            grid-template-columns: repeat(9, 45px);
             gap: 0;
             background: #1a1a2e;
             padding: 4px;
@@ -689,14 +586,14 @@
         }
 
         .sudoku-cell {
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             border: 1px solid #2a2a4a;
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.3em;
+            font-size: 1.5em;
             font-weight: 700;
             background: rgba(255,255,255,0.05);
             color: #fff;
@@ -730,147 +627,179 @@
             75% { transform: translateX(5px); }
         }
 
-        /* Enhanced Platformer */
-        .platformer-canvas {
-            width: 320px;
-            height: 240px;
-            background: linear-gradient(to bottom, #87ceeb 0%, #e0f6ff 40%, #8b4513 40%, #654321 100%);
-            position: relative;
+        /* Tic Tac Toe */
+        .ttt-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 120px);
+            gap: 10px;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            padding: 20px;
             border-radius: 15px;
-            overflow: hidden;
-            box-shadow: inset 0 0 50px rgba(0,0,0,0.2);
+            box-shadow: inset 0 4px 20px rgba(0,0,0,0.5);
         }
 
-        .platformer-player {
-            width: 35px;
-            height: 35px;
-            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
-            position: absolute;
-            border-radius: 8px;
-            border: 2px solid #c92a2a;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            transition: all 0.1s;
-        }
-
-        .platformer-player::before {
-            content: '👀';
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            font-size: 0.8em;
-        }
-
-        .platformer-ground {
-            width: 100%;
-            height: 60px;
-            background: linear-gradient(to bottom, #8b4513, #5d4037);
-            position: absolute;
-            bottom: 0;
-            border-top: 4px solid #3e2723;
-        }
-
-        .platformer-coin {
-            width: 25px;
-            height: 25px;
-            background: linear-gradient(135deg, #ffd700, #ff8c00);
-            border-radius: 50%;
-            position: absolute;
-            border: 2px solid #ff6f00;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
-            animation: coinFloat 2s ease-in-out infinite, coinSpin 3s linear infinite;
-        }
-
-        @keyframes coinFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-
-        @keyframes coinSpin {
-            0% { transform: rotateY(0deg); }
-            100% { transform: rotateY(360deg); }
-        }
-
-        /* Enhanced Tower Defense */
-        .td-canvas {
-            width: 320px;
-            height: 240px;
-            background: linear-gradient(135deg, #1b5e20, #2e7d32);
-            position: relative;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: inset 0 0 50px rgba(0,0,0,0.3);
-        }
-
-        .td-path {
-            width: 50px;
-            height: 100%;
-            background: linear-gradient(to right, #5d4037, #8d6e63, #5d4037);
-            position: absolute;
-            left: 135px;
-            border-left: 3px solid #3e2723;
-            border-right: 3px solid #3e2723;
-        }
-
-        .td-tower {
-            width: 35px;
-            height: 35px;
-            background: linear-gradient(135deg, #1976d2, #0d47a1);
-            position: absolute;
-            border-radius: 8px;
-            border: 2px solid #0d47a1;
+        .ttt-cell {
+            width: 120px;
+            height: 120px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3em;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4em;
+            font-weight: 700;
             cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .ttt-cell:hover {
+            background: rgba(255,255,255,0.1);
+            transform: scale(1.05);
+        }
+
+        .ttt-cell.x { 
+            color: var(--neon-blue);
+            text-shadow: 0 0 30px rgba(0, 243, 255, 0.8);
+        }
+        .ttt-cell.o { 
+            color: var(--neon-pink);
+            text-shadow: 0 0 30px rgba(255, 0, 255, 0.8);
+        }
+
+        /* Dama (Checkers) */
+        .dama-board {
+            display: grid;
+            grid-template-columns: repeat(8, 60px);
+            gap: 0;
+            border: 4px solid #8b4513;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .dama-cell {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .dama-cell.light { background: linear-gradient(135deg, #f0d9b5, #e8cfa0); }
+        .dama-cell.dark { 
+            background: linear-gradient(135deg, #b58863, #a07850);
+        }
+
+        .dama-cell.valid-move {
+            background: radial-gradient(circle, rgba(0,255,0,0.5), transparent) !important;
+        }
+
+        .dama-piece {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6em;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
             transition: all 0.3s;
         }
 
-        .td-tower:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 20px rgba(25, 118, 210, 0.6);
+        .dama-piece.red {
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+            border: 3px solid #990000;
         }
 
-        .td-tower.range {
-            position: absolute;
-            border: 2px dashed rgba(25, 118, 210, 0.3);
-            border-radius: 50%;
-            pointer-events: none;
+        .dama-piece.black {
+            background: linear-gradient(135deg, #444444, #000000);
+            border: 3px solid #222222;
         }
 
-        .td-enemy {
-            width: 30px;
-            height: 30px;
-            background: linear-gradient(135deg, #d32f2f, #b71c1c);
-            border-radius: 50%;
-            position: absolute;
-            border: 2px solid #7f0000;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-            transition: top 0.1s linear;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .td-enemy::before {
-            content: '👾';
+        .dama-piece.king::after {
+            content: '👑';
             font-size: 0.8em;
         }
 
-        .td-projectile {
-            width: 8px;
-            height: 8px;
-            background: #00f3ff;
-            border-radius: 50%;
-            position: absolute;
-            box-shadow: 0 0 10px #00f3ff;
-            pointer-events: none;
+        .dama-cell.selected .dama-piece {
+            transform: scale(1.2);
+            box-shadow: 0 0 30px rgba(255, 255, 0, 0.8);
+        }
+
+        /* Shogi */
+        .shogi-board {
+            display: grid;
+            grid-template-columns: repeat(9, 50px);
+            gap: 1px;
+            background: #8b6914;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .shogi-cell {
+            width: 50px;
+            height: 55px;
+            background: #deb887;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            border: 1px solid #8b6914;
+        }
+
+        .shogi-cell:nth-child(odd) { background: #d4a574; }
+
+        .shogi-piece {
+            width: 40px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.8em;
+            font-weight: 700;
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            border-radius: 3px;
+            transition: all 0.3s;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .shogi-piece.sent {
+            background: linear-gradient(135deg, #ffeb3b, #fbc02d);
+            color: #000;
+            border: 2px solid #f57f17;
+        }
+
+        .shogi-piece.gote {
+            background: linear-gradient(135deg, #424242, #212121);
+            color: #fff;
+            border: 2px solid #000;
+            transform: rotate(180deg);
+        }
+
+        .shogi-cell.selected {
+            background: #f7ec5e !important;
+            box-shadow: inset 0 0 15px rgba(247, 236, 94, 0.8);
+        }
+
+        .shogi-cell.valid-move {
+            background: #90ee90 !important;
         }
 
         /* Controls & UI */
         .controls {
-            margin-top: 20px;
+            margin-top: 25px;
             display: flex;
             gap: 12px;
             flex-wrap: wrap;
@@ -968,7 +897,6 @@
             color: var(--neon-yellow);
         }
 
-        /* Difficulty Selector */
         .difficulty-selector {
             display: flex;
             gap: 10px;
@@ -988,23 +916,58 @@
             box-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
         }
 
-        /* Particle Effects */
-        .particle {
-            position: absolute;
-            pointer-events: none;
-            animation: particleFloat 1s ease-out forwards;
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
         }
 
-        @keyframes particleFloat {
-            0% { transform: translate(0, 0) scale(1); opacity: 1; }
-            100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+        .stat-item {
+            background: var(--panel-bg);
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9em;
+        }
+
+        .stat-icon {
+            font-size: 1.2em;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .games-grid { grid-template-columns: 1fr; }
             h1 { font-size: 2.5em; }
             .stats-bar { flex-direction: column; align-items: center; }
+            .tabs-container { gap: 5px; }
+            .tab-btn { padding: 10px 20px; font-size: 0.8em; }
+            .game-container { padding: 15px; }
+            .grid-2048 { grid-template-columns: repeat(4, 60px); gap: 8px; padding: 15px; }
+            .tile-2048 { width: 60px; height: 60px; font-size: 1.5em; }
+            .snake-grid { grid-template-columns: repeat(15, 18px); }
+            .snake-cell { width: 18px; height: 18px; }
+            .tetris-board { grid-template-columns: repeat(10, 22px); }
+            .tetris-cell { width: 22px; height: 22px; }
+            .wordle-grid { grid-template-columns: repeat(5, 50px); }
+            .wordle-cell { width: 50px; height: 50px; font-size: 1.5em; }
+            .chess-board { grid-template-columns: repeat(8, 40px); }
+            .chess-cell { width: 40px; height: 40px; font-size: 1.8em; }
+            .sudoku-grid { grid-template-columns: repeat(9, 35px); }
+            .sudoku-cell { width: 35px; height: 35px; font-size: 1.2em; }
+            .ttt-grid { grid-template-columns: repeat(3, 90px); }
+            .ttt-cell { width: 90px; height: 90px; font-size: 3em; }
+            .dama-board { grid-template-columns: repeat(8, 40px); }
+            .dama-cell { width: 40px; height: 40px; }
+            .dama-piece { width: 32px; height: 32px; }
+            .shogi-board { grid-template-columns: repeat(9, 35px); }
+            .shogi-cell { width: 35px; height: 40px; }
+            .shogi-piece { width: 30px; height: 35px; font-size: 1.3em; }
         }
 
         /* Scrollbar */
@@ -1054,7 +1017,7 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Save/Load Notification */
+        /* Notification */
         .notification {
             position: fixed;
             bottom: 30px;
@@ -1088,7 +1051,7 @@
     <div class="container">
         <header>
             <h1>NEON ARCADE</h1>
-            <p class="subtitle">Premium HTML5 Game Collection • No Backend Required</p>
+            <p class="subtitle">Strategic Edition • Classic Board Games</p>
             
             <div class="stats-bar">
                 <div class="stat-item">
@@ -1109,8 +1072,21 @@
             </div>
         </header>
 
-        <div class="games-grid">
-            <!-- Game 1: 2048 -->
+        <!-- Tabs Navigation -->
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="switchTab('2048')">2048</button>
+            <button class="tab-btn" onclick="switchTab('snake')">Cyber Snake</button>
+            <button class="tab-btn" onclick="switchTab('tetris')">Block Matrix</button>
+            <button class="tab-btn" onclick="switchTab('wordle')">Word Cipher</button>
+            <button class="tab-btn" onclick="switchTab('chess')">Cyber Chess</button>
+            <button class="tab-btn" onclick="switchTab('sudoku')">Number Matrix</button>
+            <button class="tab-btn" onclick="switchTab('tictactoe')">Tic Tac Toe</button>
+            <button class="tab-btn" onclick="switchTab('dama')">Dama</button>
+            <button class="tab-btn" onclick="switchTab('shogi')">Shogi</button>
+        </div>
+
+        <!-- Game 1: 2048 -->
+        <div id="tab-2048" class="game-display active">
             <div class="game-card">
                 <div class="game-header">
                     <span class="game-title">2048 NEON</span>
@@ -1132,8 +1108,10 @@
                 </div>
                 <p class="instructions">Arrow Keys to move • Merge tiles to reach 2048</p>
             </div>
+        </div>
 
-            <!-- Game 2: Snake -->
+        <!-- Game 2: Snake -->
+        <div id="tab-snake" class="game-display">
             <div class="game-card">
                 <div class="game-header">
                     <span class="game-title">Cyber Snake</span>
@@ -1160,8 +1138,10 @@
                 </div>
                 <p class="instructions">Arrow Keys • Space to Pause • Eat food to grow</p>
             </div>
+        </div>
 
-            <!-- Game 3: Tetris -->
+        <!-- Game 3: Tetris -->
+        <div id="tab-tetris" class="game-display">
             <div class="game-card">
                 <div class="game-header">
                     <span class="game-title">Block Matrix</span>
@@ -1188,8 +1168,10 @@
                 </div>
                 <p class="instructions">← → Move • ↑ Rotate • ↓ Soft Drop • Space Hard Drop</p>
             </div>
+        </div>
 
-            <!-- Game 4: Wordle -->
+        <!-- Game 4: Wordle -->
+        <div id="tab-wordle" class="game-display">
             <div class="game-card">
                 <div class="game-header">
                     <span class="game-title">Word Cipher</span>
@@ -1212,63 +1194,10 @@
                 </div>
                 <p class="instructions">Type to guess • Green=Correct • Yellow=Wrong Position • Gray=Not in word</p>
             </div>
+        </div>
 
-            <!-- Game 5: Minesweeper -->
-            <div class="game-card">
-                <div class="game-header">
-                    <span class="game-title">Mine Field</span>
-                    <span class="game-badge">STRATEGY</span>
-                </div>
-                <div class="game-container" id="gameMines">
-                    <div class="high-score">Wins: <span id="winsMines">0</span></div>
-                    <div class="score-display">⏱️ <span id="timerMines">0</span>s | 🚩 <span id="mineCount">10</span></div>
-                    <div class="difficulty-selector">
-                        <button class="diff-btn active" onclick="setMinesDifficulty(8, 10)">Easy</button>
-                        <button class="diff-btn" onclick="setMinesDifficulty(12, 20)">Medium</button>
-                        <button class="diff-btn" onclick="setMinesDifficulty(16, 40)">Hard</button>
-                    </div>
-                    <div class="mines-grid" id="minesGrid"></div>
-                    <div class="game-over" id="overMines">
-                        <h3 id="minesTitle">Game Over</h3>
-                        <div class="final-score" id="minesMsg">Time: 0s</div>
-                        <button onclick="initMines()">Try Again</button>
-                    </div>
-                </div>
-                <div class="controls">
-                    <button onclick="initMines()">🔄 New Game</button>
-                    <button onclick="autoSolveMines()">🤖 Auto-Solve</button>
-                </div>
-                <p class="instructions">Left Click: Reveal • Right Click: Flag • Numbers = adjacent mines</p>
-            </div>
-
-            <!-- Game 6: Flappy Bird -->
-            <div class="game-card">
-                <div class="game-header">
-                    <span class="game-title">Neon Flight</span>
-                    <span class="game-badge">ARCADE</span>
-                </div>
-                <div class="game-container" id="gameFlappy">
-                    <div class="high-score">Best: <span id="bestFlappy">0</span></div>
-                    <div class="score-display">Score: <span id="scoreFlappy">0</span></div>
-                    <div class="flappy-container" id="flappyContainer" onclick="flappyJump()">
-                        <div class="flappy-bird" id="flappyBird">
-                            <div class="flappy-wing"></div>
-                        </div>
-                    </div>
-                    <div class="game-over lose" id="overFlappy">
-                        <h3>Crash!</h3>
-                        <div class="final-score">Score: <span id="finalFlappy">0</span></div>
-                        <button onclick="initFlappy()">Try Again</button>
-                    </div>
-                </div>
-                <div class="controls">
-                    <button onclick="toggleFlappy()" id="btnFlappy">▶️ Start</button>
-                    <button onclick="initFlappy()" class="danger">🔄 Reset</button>
-                </div>
-                <p class="instructions">Click, Space, or Tap to jump • Avoid pipes • Collect points</p>
-            </div>
-
-            <!-- Game 7: Chess -->
+        <!-- Game 5: Chess -->
+        <div id="tab-chess" class="game-display">
             <div class="game-card">
                 <div class="game-header">
                     <span class="game-title">Cyber Chess</span>
@@ -1291,8 +1220,10 @@
                 </div>
                 <p class="instructions">Click piece then destination • AI available • Undo last move</p>
             </div>
+        </div>
 
-            <!-- Game 8: Sudoku -->
+        <!-- Game 6: Sudoku -->
+        <div id="tab-sudoku" class="game-display">
             <div class="game-card">
                 <div class="game-header">
                     <span class="game-title">Number Matrix</span>
@@ -1320,67 +1251,90 @@
                 </div>
                 <p class="instructions">Click cell then 1-9 • 0 or Delete to clear • No duplicates in row/column/box</p>
             </div>
+        </div>
 
-            <!-- Game 9: Platformer -->
+        <!-- Game 7: Tic Tac Toe -->
+        <div id="tab-tictactoe" class="game-display">
             <div class="game-card">
                 <div class="game-header">
-                    <span class="game-title">Jump Core</span>
-                    <span class="game-badge">ACTION</span>
-                </div>
-                <div class="game-container" id="gamePlatformer">
-                    <div class="high-score">Level: <span id="levelPlatformer">1</span></div>
-                    <div class="score-display">Coins: <span id="scorePlatformer">0</span></div>
-                    <div class="platformer-canvas" id="platformerCanvas">
-                        <div class="platformer-player" id="platformerPlayer"></div>
-                        <div class="platformer-ground"></div>
-                    </div>
-                    <div class="game-over win" id="overPlatformer">
-                        <h3>Level Complete!</h3>
-                        <div class="final-score">Coins: <span id="finalPlatformer">0</span></div>
-                        <button onclick="nextLevelPlatformer()">Next Level</button>
-                    </div>
-                </div>
-                <div class="controls">
-                    <button onclick="togglePlatformer()" id="btnPlatformer">▶️ Start</button>
-                    <button onclick="initPlatformer()" class="danger">🔄 Reset</button>
-                </div>
-                <p class="instructions">← → Move • Space/↑ Jump • Collect coins • Avoid falling</p>
-            </div>
-
-            <!-- Game 10: Tower Defense -->
-            <div class="game-card">
-                <div class="game-header">
-                    <span class="game-title">Defense Grid</span>
+                    <span class="game-title">Tic Tac Toe</span>
                     <span class="game-badge">STRATEGY</span>
                 </div>
-                <div class="game-container" id="gameTD">
-                    <div class="high-score">Wave: <span id="waveTD">0</span></div>
-                    <div class="score-display">❤️ <span id="livesTD">20</span> | 💰 <span id="goldTD">100</span></div>
-                    <div class="td-canvas" id="tdCanvas" onclick="placeTower(event)">
-                        <div class="td-path"></div>
-                    </div>
-                    <div class="game-over lose" id="overTD">
-                        <h3>Base Destroyed</h3>
-                        <div class="final-score">Waves Survived: <span id="finalWaveTD">0</span></div>
-                        <button onclick="initTD()">Try Again</button>
+                <div class="game-container" id="gameTicTacToe">
+                    <div class="high-score">X Wins: <span id="xWins">0</span> | O Wins: <span id="oWins">0</span></div>
+                    <div class="score-display" id="tttStatus">X's Turn</div>
+                    <div class="ttt-grid" id="tttGrid"></div>
+                    <div class="game-over win" id="overTicTacToe">
+                        <h3 id="tttResult">X Wins!</h3>
+                        <button onclick="initTicTacToe()">Play Again</button>
                     </div>
                 </div>
                 <div class="controls">
-                    <button onclick="toggleTD()" id="btnTD">▶️ Start Wave</button>
-                    <button onclick="upgradeTowers()">⬆️ Upgrade (100g)</button>
-                    <button onclick="initTD()" class="danger">🔄 Reset</button>
+                    <button onclick="initTicTacToe()">🔄 New Game</button>
+                    <button onclick="toggleTTTAI()" id="btnTTTAI">🤖 vs AI: OFF</button>
+                    <button onclick="resetTTTScore()" class="danger">🗑️ Reset Score</button>
                 </div>
-                <p class="instructions">Click map to place towers (50g) • Upgrade to increase range/damage</p>
+                <p class="instructions">Click to place • Get 3 in a row to win • Play vs AI or friend</p>
+            </div>
+        </div>
+
+        <!-- Game 8: Dama (Checkers) -->
+        <div id="tab-dama" class="game-display">
+            <div class="game-card">
+                <div class="game-header">
+                    <span class="game-title">Dama</span>
+                    <span class="game-badge">STRATEGY</span>
+                </div>
+                <div class="game-container" id="gameDama">
+                    <div class="high-score">Red: <span id="redScore">12</span> | Black: <span id="blackScore">12</span></div>
+                    <div class="score-display" id="damaStatus">Red's Turn</div>
+                    <div class="dama-board" id="damaBoard"></div>
+                    <div class="game-over win" id="overDama">
+                        <h3 id="damaResult">Red Wins!</h3>
+                        <button onclick="initDama()">New Game</button>
+                    </div>
+                </div>
+                <div class="controls">
+                    <button onclick="initDama()">🔄 New Game</button>
+                    <button onclick="toggleDamaAI()" id="btnDamaAI">🤖 vs AI: OFF</button>
+                    <button onclick="undoDama()">↩️ Undo</button>
+                </div>
+                <p class="instructions">Click piece then destination • Must capture if possible • Reach end to become King</p>
+            </div>
+        </div>
+
+        <!-- Game 9: Shogi -->
+        <div id="tab-shogi" class="game-display">
+            <div class="game-card">
+                <div class="game-header">
+                    <span class="game-title">Shogi</span>
+                    <span class="game-badge">STRATEGY</span>
+                </div>
+                <div class="game-container" id="gameShogi">
+                    <div class="high-score">Turn: <span id="shogiTurn">Sente (Black)</span></div>
+                    <div class="score-display" id="shogiStatus">Select a piece</div>
+                    <div class="shogi-board" id="shogiBoard"></div>
+                    <div class="game-over win" id="overShogi">
+                        <h3 id="shogiResult">Checkmate!</h3>
+                        <div class="final-score" id="shogiWinner">Sente Wins!</div>
+                        <button onclick="initShogi()">New Game</button>
+                    </div>
+                </div>
+                <div class="controls">
+                    <button onclick="initShogi()">🔄 New Game</button>
+                    <button onclick="toggleShogiAI()" id="btnShogiAI">🤖 vs AI: OFF</button>
+                    <button onclick="undoShogi()">↩️ Undo</button>
+                </div>
+                <p class="instructions">Click piece then destination • Promote by reaching enemy zone • Capture and drop pieces</p>
             </div>
         </div>
     </div>
 
     <script>
         // ==================== GLOBAL SYSTEM ====================
-        const STORAGE_KEY = 'neon_arcade_v2';
+        const STORAGE_KEY = 'neon_arcade_v3';
         let globalStats = { totalScore: 0, gamesPlayed: 0, lastPlayed: Date.now() };
         
-        // Audio Context for sound effects
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         const audioCtx = new AudioContext();
         
@@ -1416,14 +1370,33 @@
                 p.style.height = '6px';
                 p.style.background = color;
                 p.style.borderRadius = '50%';
+                p.style.position = 'fixed';
+                p.style.pointerEvents = 'none';
+                p.style.zIndex = '9999';
                 p.style.setProperty('--tx', (Math.random() - 0.5) * 100 + 'px');
                 p.style.setProperty('--ty', (Math.random() - 0.5) * 100 + 'px');
+                p.style.animation = 'particleFloat 1s ease-out forwards';
                 container.appendChild(p);
                 setTimeout(() => p.remove(), 1000);
             }
         }
 
-        // Save/Load System
+        // Tab Switching
+        function switchTab(gameId) {
+            document.querySelectorAll('.game-display').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById('tab-' + gameId).classList.add('active');
+            event.target.classList.add('active');
+            
+            // Initialize game if not already running
+            if (gameId === 'snake' && snake.length === 0) initSnake();
+            else if (gameId === 'tetris' && !currentPiece) initTetris();
+            else if (gameId === 'tictactoe' && tttBoard.length === 0) initTicTacToe();
+            else if (gameId === 'dama' && damaBoard.length === 0) initDama();
+            else if (gameId === 'shogi' && shogiBoard.length === 0) initShogi();
+        }
+
         function saveAllGames() {
             const data = {
                 globalStats,
@@ -1432,12 +1405,11 @@
                     snake: { score: scoreSnake, best: bestSnake, snake: snake, running: snakeRunning },
                     tetris: { score: scoreTetris, best: bestTetris, board: boardTetris },
                     wordle: { streak: streakWordle, grid: gridWordle },
-                    mines: { wins: winsMines, time: timerMinesValue },
-                    flappy: { score: flappyScore, best: bestFlappy },
                     chess: { board: chessBoard, turn: currentTurn },
                     sudoku: { solved: solvedSudoku, grid: sudokuGrid },
-                    platformer: { level: levelPlatformer, score: platScore },
-                    td: { gold: tdGold, lives: tdLives, wave: tdWave }
+                    tictactoe: { xWins: xWins, oWins: oWins },
+                    dama: { board: damaBoard, turn: damaTurn },
+                    shogi: { board: shogiBoard, turn: shogiTurn }
                 }
             };
             localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -1455,7 +1427,6 @@
             globalStats = data.globalStats || globalStats;
             updateGlobalStats();
             
-            // Restore game states
             if (data.games) {
                 if (data.games.g2048) {
                     score2048 = data.games.g2048.score || 0;
@@ -1464,7 +1435,12 @@
                     document.getElementById('best2048').textContent = best2048;
                     if (grid2048.length) render2048();
                 }
-                // Similar for other games...
+                if (data.games.tictactoe) {
+                    xWins = data.games.tictactoe.xWins || 0;
+                    oWins = data.games.tictactoe.oWins || 0;
+                    document.getElementById('xWins').textContent = xWins;
+                    document.getElementById('oWins').textContent = oWins;
+                }
             }
             
             showNotification('Games Loaded! 📂');
@@ -1607,13 +1583,6 @@
             playSound(200, 'sawtooth', 0.5);
         }
 
-        document.addEventListener('keydown', e => {
-            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
-                e.preventDefault();
-                move2048(e.key.replace('Arrow', '').toLowerCase());
-            }
-        });
-
         // ==================== GAME 2: SNAKE ====================
         let snake = [], food = {}, dir = {x: 0, y: 0}, nextDir = {x: 0, y: 0};
         let snakeInterval, scoreSnake = 0, bestSnake = 0, snakeRunning = false, snakeSpeed = 150;
@@ -1712,17 +1681,6 @@
                 document.getElementById('btnSnake').textContent = '⏸️ Pause';
             }
         }
-
-        document.addEventListener('keydown', e => {
-            if (!snakeRunning) return;
-            switch(e.key) {
-                case 'ArrowUp': if (dir.y === 0) nextDir = {x: 0, y: -1}; break;
-                case 'ArrowDown': if (dir.y === 0) nextDir = {x: 0, y: 1}; break;
-                case 'ArrowLeft': if (dir.x === 0) nextDir = {x: -1, y: 0}; break;
-                case 'ArrowRight': if (dir.x === 0) nextDir = {x: 1, y: 0}; break;
-                case ' ': e.preventDefault(); toggleSnake(); break;
-            }
-        });
 
         // ==================== GAME 3: TETRIS ====================
         const tetrominoes = {
@@ -1905,26 +1863,6 @@
             }
         }
 
-        document.addEventListener('keydown', e => {
-            if (!tetrisRunning || !currentPiece) return;
-            switch(e.key) {
-                case 'ArrowLeft': 
-                    if (isValidPosition(currentPiece.shape, currentPiece.x - 1, currentPiece.y)) currentPiece.x--;
-                    break;
-                case 'ArrowRight':
-                    if (isValidPosition(currentPiece.shape, currentPiece.x + 1, currentPiece.y)) currentPiece.x++;
-                    break;
-                case 'ArrowDown':
-                    updateTetris();
-                    scoreTetris += 1;
-                    document.getElementById('scoreTetris').textContent = scoreTetris;
-                    break;
-                case 'ArrowUp': rotatePiece(); break;
-                case ' ': hardDrop(); break;
-            }
-            renderTetris();
-        });
-
         // ==================== GAME 4: WORDLE ====================
         const wordList = ['REACT', 'HOUSE', 'PLANE', 'WATER', 'MUSIC', 'LIGHT', 'POWER', 'BRAIN', 'MOUSE', 'PHONE', 'WORLD', 'BEACH', 'DANCE', 'LAUGH', 'DREAM', 'SMILE', 'HEART', 'SPACE', 'ROBOT', 'CYBER'];
         let targetWord = '', currentRow = 0, currentCol = 0, gridWordle = [], streakWordle = 0;
@@ -1938,7 +1876,6 @@
             document.getElementById('guessesWordle').textContent = '0';
             renderWordle();
             createKeyboard();
-            console.log('Debug:', targetWord); // For testing
         }
 
         function renderWordle() {
@@ -1981,7 +1918,7 @@
                     const enter = document.createElement('button');
                     enter.className = 'wordle-key';
                     enter.textContent = '⏎';
-                    enter.style.minWidth = '50px';
+                    enter.style.minWidth = '60px';
                     enter.onclick = submitGuess;
                     rowDiv.appendChild(enter);
                 }
@@ -2002,7 +1939,6 @@
             if (currentCol !== 5) return;
             const guess = gridWordle[currentRow].join('');
             
-            // Update keyboard colors
             for (let c = 0; c < 5; c++) {
                 const char = gridWordle[currentRow][c];
                 const key = document.getElementById('key-' + char);
@@ -2046,7 +1982,6 @@
             if (streakWordle > 0) {
                 streakWordle--;
                 document.getElementById('streakWordle').textContent = streakWordle;
-                // Reveal one correct letter
                 for (let c = 0; c < 5; c++) {
                     if (gridWordle[currentRow][c] === '') {
                         gridWordle[currentRow][c] = targetWord[c];
@@ -2058,322 +1993,7 @@
             }
         }
 
-        document.addEventListener('keydown', e => {
-            if (document.getElementById('overWordle').style.display === 'block') return;
-            if (e.key === 'Enter') submitGuess();
-            else if (e.key === 'Backspace' && currentCol > 0) {
-                currentCol--;
-                gridWordle[currentRow][currentCol] = '';
-                renderWordle();
-            }
-            else if (/^[a-zA-Z]$/.test(e.key)) inputLetter(e.key.toUpperCase());
-        });
-
-        // ==================== GAME 5: MINESWEEPER ====================
-        let minesGrid = [], minesRevealed = [], minesFlagged = [], minePositions = [];
-        let minesWidth = 8, minesHeight = 8, minesCount = 10;
-        let timerMines, timerMinesValue = 0, winsMines = 0;
-        let firstClick = true;
-
-        function setMinesDifficulty(w, c) {
-            minesWidth = w;
-            minesHeight = w;
-            minesCount = c;
-            document.querySelectorAll('#gameMines .diff-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            initMines();
-        }
-
-        function initMines() {
-            clearInterval(timerMines);
-            timerMinesValue = 0;
-            document.getElementById('timerMines').textContent = '0';
-            firstClick = true;
-            
-            minesGrid = Array(minesHeight).fill().map(() => Array(minesWidth).fill(0));
-            minesRevealed = Array(minesHeight).fill().map(() => Array(minesWidth).fill(false));
-            minesFlagged = Array(minesHeight).fill().map(() => Array(minesWidth).fill(false));
-            minePositions = [];
-            
-            const gridEl = document.getElementById('minesGrid');
-            gridEl.style.gridTemplateColumns = `repeat(${minesWidth}, 35px)`;
-            
-            document.getElementById('mineCount').textContent = minesCount;
-            document.getElementById('overMines').style.display = 'none';
-            renderMines();
-        }
-
-        function placeMines(excludeR, excludeC) {
-            let placed = 0;
-            while (placed < minesCount) {
-                const r = Math.floor(Math.random() * minesHeight);
-                const c = Math.floor(Math.random() * minesWidth);
-                if (!minesGrid[r][c] && !(r === excludeR && c === excludeC)) {
-                    minesGrid[r][c] = -1;
-                    minePositions.push({r, c});
-                    placed++;
-                }
-            }
-
-            for (let r = 0; r < minesHeight; r++) {
-                for (let c = 0; c < minesWidth; c++) {
-                    if (minesGrid[r][c] !== -1) {
-                        let count = 0;
-                        for (let dr = -1; dr <= 1; dr++) {
-                            for (let dc = -1; dc <= 1; dc++) {
-                                const nr = r + dr, nc = c + dc;
-                                if (nr >= 0 && nr < minesHeight && nc >= 0 && nc < minesWidth && minesGrid[nr][nc] === -1) count++;
-                            }
-                        }
-                        minesGrid[r][c] = count;
-                    }
-                }
-            }
-        }
-
-        function renderMines() {
-            const grid = document.getElementById('minesGrid');
-            grid.innerHTML = '';
-            for (let r = 0; r < minesHeight; r++) {
-                for (let c = 0; c < minesWidth; c++) {
-                    const cell = document.createElement('div');
-                    cell.className = 'mine-cell';
-                    if (minesRevealed[r][c]) {
-                        cell.classList.add('revealed');
-                        if (minesGrid[r][c] === -1) {
-                            cell.classList.add('mine');
-                            cell.textContent = '💣';
-                        } else if (minesGrid[r][c] > 0) {
-                            cell.textContent = minesGrid[r][c];
-                            const colors = ['', '#2979ff', '#00c853', '#ff1744', '#aa00ff', '#ff6d00', '#00b8d4', '#000', '#757575'];
-                            cell.style.color = colors[minesGrid[r][c]];
-                        }
-                    } else if (minesFlagged[r][c]) {
-                        cell.classList.add('flagged');
-                        cell.textContent = '🚩';
-                    }
-                    cell.oncontextmenu = (e) => { e.preventDefault(); flagCell(r, c); };
-                    cell.onclick = () => revealCell(r, c);
-                    grid.appendChild(cell);
-                }
-            }
-        }
-
-        function revealCell(r, c) {
-            if (minesRevealed[r][c] || minesFlagged[r][c]) return;
-            
-            if (firstClick) {
-                placeMines(r, c);
-                firstClick = false;
-                timerMines = setInterval(() => {
-                    timerMinesValue++;
-                    document.getElementById('timerMines').textContent = timerMinesValue;
-                }, 1000);
-            }
-            
-            minesRevealed[r][c] = true;
-            playSound(400, 'sine', 0.05);
-            
-            if (minesGrid[r][c] === -1) {
-                gameOverMines(false);
-            } else if (minesGrid[r][c] === 0) {
-                for (let dr = -1; dr <= 1; dr++) {
-                    for (let dc = -1; dc <= 1; dc++) {
-                        const nr = r + dr, nc = c + dc;
-                        if (nr >= 0 && nr < minesHeight && nc >= 0 && nc < minesWidth) revealCell(nr, nc);
-                    }
-                }
-            }
-            
-            checkWinMines();
-            renderMines();
-        }
-
-        function flagCell(r, c) {
-            if (!minesRevealed[r][c]) {
-                minesFlagged[r][c] = !minesFlagged[r][c];
-                const flagged = minesFlagged.flat().filter(f => f).length;
-                document.getElementById('mineCount').textContent = minesCount - flagged;
-                playSound(300, 'sine', 0.05);
-                renderMines();
-            }
-        }
-
-        function checkWinMines() {
-            let revealed = 0;
-            for (let r = 0; r < minesHeight; r++)
-                for (let c = 0; c < minesWidth; c++)
-                    if (minesRevealed[r][c]) revealed++;
-            if (revealed === minesWidth * minesHeight - minesCount) {
-                gameOverMines(true);
-            }
-        }
-
-        function gameOverMines(won) {
-            clearInterval(timerMines);
-            minePositions.forEach(m => minesRevealed[m.r][m.c] = true);
-            renderMines();
-            
-            const over = document.getElementById('overMines');
-            over.className = won ? 'game-over win' : 'game-over lose';
-            document.getElementById('minesTitle').textContent = won ? 'Victory!' : 'BOOM!';
-            document.getElementById('minesMsg').textContent = `Time: ${timerMinesValue}s`;
-            over.style.display = 'block';
-            
-            if (won) {
-                winsMines++;
-                document.getElementById('winsMines').textContent = winsMines;
-                playSound(800, 'sine', 0.3);
-                createParticles(150, 150, '#00ff88', 20);
-            } else {
-                playSound(200, 'sawtooth', 0.5);
-            }
-        }
-
-        function autoSolveMines() {
-            // Simple auto-solver: reveal all safe cells
-            for (let r = 0; r < minesHeight; r++) {
-                for (let c = 0; c < minesWidth; c++) {
-                    if (!minesRevealed[r][c] && minesGrid[r][c] !== -1) {
-                        revealCell(r, c);
-                        return;
-                    }
-                }
-            }
-        }
-
-        // ==================== GAME 6: FLAPPY BIRD ====================
-        let flappyY = 100, flappyVel = 0, flappyScore = 0, bestFlappy = 0;
-        let flappyInterval, flappyRunning = false;
-        let pipes = [], pipeTimer = 0;
-
-        function initFlappy() {
-            flappyY = 100;
-            flappyVel = 0;
-            flappyScore = 0;
-            pipes = [];
-            pipeTimer = 0;
-            document.getElementById('scoreFlappy').textContent = '0';
-            document.getElementById('overFlappy').style.display = 'none';
-            document.getElementById('flappyBird').style.top = flappyY + 'px';
-            document.querySelectorAll('.flappy-pipe').forEach(p => p.remove());
-        }
-
-        function flappyJump() {
-            if (!flappyRunning) {
-                toggleFlappy();
-                return;
-            }
-            flappyVel = -10;
-            playSound(600, 'sine', 0.1);
-        }
-
-        function updateFlappy() {
-            flappyVel += 0.6;
-            flappyY += flappyVel;
-
-            const bird = document.getElementById('flappyBird');
-            bird.style.top = flappyY + 'px';
-            bird.style.transform = `rotate(${Math.min(flappyVel * 3, 90)}deg)`;
-
-            // Spawn pipes
-            pipeTimer++;
-            if (pipeTimer > 120) {
-                createPipe();
-                pipeTimer = 0;
-            }
-
-            // Update pipes
-            pipes.forEach((pipe, i) => {
-                pipe.x -= 3;
-                pipe.topEl.style.right = (320 - pipe.x) + 'px';
-                pipe.bottomEl.style.right = (320 - pipe.x) + 'px';
-
-                if (!pipe.passed && pipe.x < 50) {
-                    flappyScore++;
-                    document.getElementById('scoreFlappy').textContent = flappyScore;
-                    pipe.passed = true;
-                    playSound(800, 'sine', 0.05);
-                }
-
-                if (pipe.x < -60) {
-                    pipe.topEl.remove();
-                    pipe.bottomEl.remove();
-                    pipes.splice(i, 1);
-                }
-
-                // Collision
-                if (50 < pipe.x + 50 && 85 > pipe.x) {
-                    if (flappyY < pipe.gapY || flappyY + 35 > pipe.gapY + 100) {
-                        gameOverFlappy();
-                    }
-                }
-            });
-
-            if (flappyY > 205 || flappyY < -35) gameOverFlappy();
-        }
-
-        function createPipe() {
-            const gapY = Math.random() * 100 + 40;
-            const topHeight = gapY;
-            const bottomHeight = 240 - gapY - 100;
-
-            const topPipe = document.createElement('div');
-            topPipe.className = 'flappy-pipe';
-            topPipe.style.height = topHeight + 'px';
-            topPipe.style.top = '0';
-            
-            const bottomPipe = document.createElement('div');
-            bottomPipe.className = 'flappy-pipe';
-            bottomPipe.style.height = bottomHeight + 'px';
-            bottomPipe.style.bottom = '0';
-
-            document.getElementById('flappyContainer').appendChild(topPipe);
-            document.getElementById('flappyContainer').appendChild(bottomPipe);
-
-            pipes.push({
-                x: 320,
-                gapY: gapY,
-                topEl: topPipe,
-                bottomEl: bottomPipe,
-                passed: false
-            });
-        }
-
-        function gameOverFlappy() {
-            clearInterval(flappyInterval);
-            flappyRunning = false;
-            document.getElementById('btnFlappy').textContent = '▶️ Start';
-            document.getElementById('finalFlappy').textContent = flappyScore;
-            document.getElementById('overFlappy').style.display = 'block';
-            
-            if (flappyScore > bestFlappy) {
-                bestFlappy = flappyScore;
-                document.getElementById('bestFlappy').textContent = bestFlappy;
-            }
-            playSound(200, 'sawtooth', 0.5);
-        }
-
-        function toggleFlappy() {
-            if (flappyRunning) {
-                clearInterval(flappyInterval);
-                flappyRunning = false;
-                document.getElementById('btnFlappy').textContent = '▶️ Resume';
-            } else {
-                flappyInterval = setInterval(updateFlappy, 1000/60);
-                flappyRunning = true;
-                document.getElementById('btnFlappy').textContent = '⏸️ Pause';
-            }
-        }
-
-        document.addEventListener('keydown', e => {
-            if (e.code === 'Space') {
-                e.preventDefault();
-                flappyJump();
-            }
-        });
-
-        // ==================== GAME 7: CHESS ====================
+        // ==================== GAME 5: CHESS ====================
         const chessPieces = {
             'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚', 'p': '♟',
             'R': '♖', 'N': '♘', 'B': '♗', 'Q': '♕', 'K': '♔', 'P': '♙'
@@ -2419,12 +2039,10 @@
                         cell.classList.add('selected');
                     }
                     
-                    // Show valid moves
                     if (selectedCell && isValidMove(selectedCell.r, selectedCell.c, r, c)) {
                         cell.classList.add('valid-move');
                     }
                     
-                    // Highlight king in check
                     if (piece.toLowerCase() === 'k' && isInCheck(piece === piece.toUpperCase() ? 'white' : 'black')) {
                         cell.classList.add('check');
                     }
@@ -2448,7 +2066,6 @@
                 }
             } else {
                 if (isValidMove(selectedCell.r, selectedCell.c, r, c)) {
-                    // Save for undo
                     moveHistory.push({
                         board: chessBoard.map(row => [...row]),
                         turn: currentTurn,
@@ -2456,18 +2073,15 @@
                         blackKing: {...blackKingPos}
                     });
                     
-                    // Move piece
                     const movingPiece = chessBoard[selectedCell.r][selectedCell.c];
                     chessBoard[r][c] = movingPiece;
                     chessBoard[selectedCell.r][selectedCell.c] = '.';
                     
-                    // Update king position
                     if (movingPiece.toLowerCase() === 'k') {
                         if (currentTurn === 'white') whiteKingPos = {r, c};
                         else blackKingPos = {r, c};
                     }
                     
-                    // Pawn promotion
                     if (movingPiece.toLowerCase() === 'p' && (r === 0 || r === 7)) {
                         chessBoard[r][c] = currentTurn === 'white' ? 'Q' : 'q';
                     }
@@ -2477,7 +2091,6 @@
                     document.getElementById('chessTurn').textContent = currentTurn === 'white' ? 'White' : 'Black';
                     document.getElementById('chessStatus').textContent = 'Select a piece';
                     
-                    // Check for checkmate
                     if (isCheckmate(currentTurn)) {
                         document.getElementById('chessResult').textContent = 'Checkmate!';
                         document.getElementById('chessWinner').textContent = (currentTurn === 'white' ? 'Black' : 'White') + ' Wins!';
@@ -2509,7 +2122,6 @@
             const dc = toC - fromC;
             const type = piece.toLowerCase();
             
-            // Can't capture own piece
             if (target !== '.' && 
                 ((piece === piece.toUpperCase() && target === target.toUpperCase()) ||
                  (piece === piece.toLowerCase() && target === target.toLowerCase()))) {
@@ -2535,7 +2147,6 @@
             
             if (!valid) return false;
             
-            // Check if move puts own king in check
             const tempBoard = chessBoard.map(r => [...r]);
             tempBoard[toR][toC] = tempBoard[fromR][fromC];
             tempBoard[fromR][fromC] = '.';
@@ -2664,7 +2275,6 @@
             }
             
             if (moves.length) {
-                // Prioritize captures
                 moves.sort((a, b) => {
                     const valA = chessBoard[a.toR][a.toC] !== '.' ? 1 : 0;
                     const valB = chessBoard[b.toR][b.toC] !== '.' ? 1 : 0;
@@ -2689,7 +2299,7 @@
             }
         }
 
-        // ==================== GAME 8: SUDOKU ====================
+        // ==================== GAME 6: SUDOKU ====================
         let sudokuGrid = [], sudokuSolution = [], selectedSudoku = null;
         let sudokuDifficulty = 30, solvedSudoku = 0;
 
@@ -2813,375 +2423,560 @@
             checkWinSudoku();
         }
 
-        document.addEventListener('keydown', e => {
-            if (!selectedSudoku) return;
-            const num = parseInt(e.key);
-            const {r, c} = selectedSudoku;
+        // ==================== GAME 7: TIC TAC TOE ====================
+        let tttBoard = [], tttCurrentPlayer = 'X', tttAIEnabled = false;
+        let xWins = 0, oWins = 0;
+
+        function initTicTacToe() {
+            tttBoard = Array(9).fill('');
+            tttCurrentPlayer = 'X';
+            document.getElementById('tttStatus').textContent = "X's Turn";
+            document.getElementById('overTicTacToe').style.display = 'none';
+            renderTicTacToe();
+        }
+
+        function renderTicTacToe() {
+            const grid = document.getElementById('tttGrid');
+            grid.innerHTML = '';
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'ttt-cell ' + (tttBoard[i] === 'X' ? 'x' : tttBoard[i] === 'O' ? 'o' : '');
+                cell.textContent = tttBoard[i];
+                cell.onclick = () => handleTTTClick(i);
+                grid.appendChild(cell);
+            }
+        }
+
+        function handleTTTClick(index) {
+            if (tttBoard[index] !== '' || document.getElementById('overTicTacToe').style.display === 'block') return;
             
-            if (num >= 0 && num <= 9) {
-                if (sudokuSolution[r][c] !== sudokuGrid[r][c] || num === 0) {
-                    sudokuGrid[r][c] = num;
-                    if (num !== 0 && num !== sudokuSolution[r][c]) {
-                        document.getElementById('sudokuStatus').textContent = 'Incorrect!';
-                        playSound(300, 'sawtooth', 0.1);
-                    } else {
-                        document.getElementById('sudokuStatus').textContent = 'Good!';
-                        if (num !== 0) playSound(500, 'sine', 0.1);
-                    }
-                    renderSudoku();
-                    if (num !== 0) checkWinSudoku();
-                }
-            }
-        });
-
-        // ==================== GAME 9: PLATFORMER ====================
-        let platX = 50, platY = 100, platVelX = 0, platVelY = 0;
-        let platRunning = false, platScore = 0, platInterval, levelPlatformer = 1;
-        let coins = [], platforms = [];
-        const gravity = 0.5, jumpPower = -12, speed = 6;
-
-        function initPlatformer() {
-            platX = 50;
-            platY = 100;
-            platVelX = 0;
-            platVelY = 0;
-            platScore = 0;
-            coins = [];
-            platforms = [{x: 0, y: 180, w: 320, h: 60}];
+            tttBoard[index] = tttCurrentPlayer;
+            playSound(tttCurrentPlayer === 'X' ? 600 : 500, 'sine', 0.1);
+            renderTicTacToe();
             
-            // Generate level
-            generateLevel();
-            
-            document.getElementById('scorePlatformer').textContent = '0';
-            document.getElementById('levelPlatformer').textContent = levelPlatformer;
-            document.getElementById('overPlatformer').style.display = 'none';
-            renderPlatformer();
-        }
-
-        function generateLevel() {
-            const canvas = document.getElementById('platformerCanvas');
-            // Clear old coins
-            document.querySelectorAll('.platformer-coin').forEach(c => c.remove());
-            
-            // Add platforms
-            for (let i = 0; i < 3 + levelPlatformer; i++) {
-                platforms.push({
-                    x: 100 + i * 80,
-                    y: 120 - (i % 3) * 40,
-                    w: 60,
-                    h: 20
-                });
-            }
-            
-            // Add coins
-            for (let i = 0; i < 3 + Math.floor(levelPlatformer / 2); i++) {
-                const coin = document.createElement('div');
-                coin.className = 'platformer-coin';
-                coin.style.left = (80 + i * 90) + 'px';
-                coin.style.bottom = (140 + (i % 2) * 60) + 'px';
-                canvas.appendChild(coin);
-                coins.push({el: coin, collected: false, x: 80 + i * 90, y: 140 + (i % 2) * 60});
-            }
-        }
-
-        function renderPlatformer() {
-            const player = document.getElementById('platformerPlayer');
-            player.style.left = platX + 'px';
-            player.style.bottom = platY + 'px';
-        }
-
-        function updatePlatformer() {
-            platVelY += gravity;
-            platX += platVelX;
-            platY += platVelY;
-
-            // Platform collision
-            let onGround = false;
-            platforms.forEach(plat => {
-                if (platX + 35 > plat.x && platX < plat.x + plat.w &&
-                    platY <= plat.y + plat.h && platY >= plat.y && platVelY >= 0) {
-                    platY = plat.y + plat.h;
-                    platVelY = 0;
-                    onGround = true;
-                }
-            });
-
-            // Fall off screen
-            if (platY < -50) {
-                platX = 50;
-                platY = 100;
-                platVelY = 0;
-            }
-
-            // Collect coins
-            coins.forEach(coin => {
-                if (!coin.collected && 
-                    platX < coin.x + 25 && platX + 35 > coin.x &&
-                    platY < coin.y + 25 && platY + 35 > coin.y) {
-                    coin.collected = true;
-                    coin.el.style.display = 'none';
-                    platScore += 10;
-                    document.getElementById('scorePlatformer').textContent = platScore;
-                    playSound(700, 'sine', 0.1);
-                    createParticles(coin.x, coin.y, '#ffd700', 8);
-                }
-            });
-
-            // Level complete
-            if (platX > 300 && coins.every(c => c.collected)) {
-                levelComplete();
-            }
-
-            renderPlatformer();
-        }
-
-        function levelComplete() {
-            clearInterval(platInterval);
-            platRunning = false;
-            document.getElementById('btnPlatformer').textContent = '▶️ Start';
-            document.getElementById('finalPlatformer').textContent = platScore;
-            document.getElementById('overPlatformer').style.display = 'block';
-            playSound(800, 'sine', 0.3);
-        }
-
-        function nextLevelPlatformer() {
-            levelPlatformer++;
-            initPlatformer();
-            togglePlatformer();
-        }
-
-        function togglePlatformer() {
-            if (platRunning) {
-                clearInterval(platInterval);
-                platRunning = false;
-                document.getElementById('btnPlatformer').textContent = '▶️ Resume';
-            } else {
-                platInterval = setInterval(updatePlatformer, 1000/60);
-                platRunning = true;
-                document.getElementById('btnPlatformer').textContent = '⏸️ Pause';
-            }
-        }
-
-        document.addEventListener('keydown', e => {
-            if (e.key === 'ArrowLeft') platVelX = -speed;
-            if (e.key === 'ArrowRight') platVelX = speed;
-            if ((e.key === ' ' || e.key === 'ArrowUp') && platVelY === 0) {
-                platVelY = jumpPower;
-                playSound(400, 'sine', 0.1);
-            }
-        });
-
-        document.addEventListener('keyup', e => {
-            if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') platVelX = 0;
-        });
-
-        // ==================== GAME 10: TOWER DEFENSE ====================
-        let tdGold = 100, tdLives = 20, tdWave = 0, tdRunning = false;
-        let tdTowers = [], tdEnemies = [], tdProjectiles = [];
-        let tdInterval, tdSpawnInterval;
-
-        function initTD() {
-            tdGold = 100;
-            tdLives = 20;
-            tdWave = 0;
-            tdTowers = [];
-            tdEnemies = [];
-            tdProjectiles = [];
-            tdRunning = false;
-            clearInterval(tdInterval);
-            clearInterval(tdSpawnInterval);
-            document.getElementById('goldTD').textContent = tdGold;
-            document.getElementById('livesTD').textContent = tdLives;
-            document.getElementById('waveTD').textContent = tdWave;
-            document.getElementById('overTD').style.display = 'none';
-            document.getElementById('tdCanvas').innerHTML = '<div class="td-path"></div>';
-            document.getElementById('btnTD').textContent = '▶️ Start Wave';
-        }
-
-        function placeTower(e) {
-            if (tdGold < 50) {
-                playSound(200, 'sawtooth', 0.1);
+            if (checkTTTWin()) {
+                setTimeout(() => {
+                    if (tttCurrentPlayer === 'X') xWins++;
+                    else oWins++;
+                    document.getElementById('xWins').textContent = xWins;
+                    document.getElementById('oWins').textContent = oWins;
+                    document.getElementById('tttResult').textContent = tttCurrentPlayer + ' Wins!';
+                    document.getElementById('overTicTacToe').className = 'game-over win';
+                    document.getElementById('overTicTacToe').style.display = 'block';
+                    playSound(800, 'sine', 0.3);
+                }, 100);
                 return;
             }
             
-            const rect = e.currentTarget.getBoundingClientRect();
-            const x = e.clientX - rect.left - 17;
-            const y = e.clientY - rect.top - 17;
+            if (tttBoard.every(cell => cell !== '')) {
+                setTimeout(() => {
+                    document.getElementById('tttResult').textContent = "It's a Draw!";
+                    document.getElementById('overTicTacToe').className = 'game-over';
+                    document.getElementById('overTicTacToe').style.display = 'block';
+                }, 100);
+                return;
+            }
             
-            if (x > 110 && x < 190) return; // Don't place on path
-
-            const tower = document.createElement('div');
-            tower.className = 'td-tower';
-            tower.style.left = x + 'px';
-            tower.style.top = y + 'px';
-            tower.innerHTML = '♜';
-            tower.dataset.level = '1';
-            document.getElementById('tdCanvas').appendChild(tower);
+            tttCurrentPlayer = tttCurrentPlayer === 'X' ? 'O' : 'X';
+            document.getElementById('tttStatus').textContent = tttCurrentPlayer + "'s Turn";
             
-            tdTowers.push({
-                x: x + 17, 
-                y: y + 17, 
-                element: tower,
-                range: 80,
-                damage: 1,
-                cooldown: 0
-            });
-            
-            tdGold -= 50;
-            document.getElementById('goldTD').textContent = tdGold;
-            playSound(500, 'sine', 0.1);
-            createParticles(x + 17, y + 17, '#00f3ff', 10);
-        }
-
-        function upgradeTowers() {
-            if (tdGold >= 100) {
-                tdGold -= 100;
-                document.getElementById('goldTD').textContent = tdGold;
-                tdTowers.forEach(tower => {
-                    tower.range += 20;
-                    tower.damage += 1;
-                    tower.element.style.transform = 'scale(1.2)';
-                    tower.element.style.boxShadow = '0 0 30px rgba(0, 243, 255, 0.8)';
-                });
-                playSound(600, 'sine', 0.2);
+            if (tttAIEnabled && tttCurrentPlayer === 'O') {
+                setTimeout(makeTTTAIMove, 500);
             }
         }
 
-        function toggleTD() {
-            if (tdRunning) return;
-            tdRunning = true;
-            tdWave++;
-            document.getElementById('waveTD').textContent = tdWave;
-            document.getElementById('btnTD').textContent = 'Wave ' + tdWave + '...';
-            
-            let spawned = 0;
-            const toSpawn = 5 + tdWave * 2;
-            
-            tdSpawnInterval = setInterval(() => {
-                if (spawned >= toSpawn) {
-                    clearInterval(tdSpawnInterval);
-                    return;
-                }
-                spawnEnemy();
-                spawned++;
-            }, 800);
-
-            tdInterval = setInterval(updateTD, 50);
+        function checkTTTWin() {
+            const wins = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]];
+            return wins.some(w => tttBoard[w[0]] !== '' && 
+                tttBoard[w[0]] === tttBoard[w[1]] && tttBoard[w[1]] === tttBoard[w[2]]);
         }
 
-        function spawnEnemy() {
-            const enemy = document.createElement('div');
-            enemy.className = 'td-enemy';
-            enemy.style.left = '145px';
-            enemy.style.top = '-30px';
-            document.getElementById('tdCanvas').appendChild(enemy);
-            
-            tdEnemies.push({
-                y: -30,
-                x: 145,
-                health: 3 + tdWave * 2,
-                maxHealth: 3 + tdWave * 2,
-                speed: 1 + tdWave * 0.3,
-                element: enemy,
-                value: 10 + tdWave * 5
-            });
-        }
-
-        function updateTD() {
-            // Update enemies
-            tdEnemies.forEach((enemy, i) => {
-                enemy.y += enemy.speed;
-                enemy.element.style.top = enemy.y + 'px';
-                
-                // Tower attacks
-                tdTowers.forEach(tower => {
-                    if (tower.cooldown > 0) tower.cooldown--;
-                    
-                    const dist = Math.hypot(tower.x - enemy.x, tower.y - enemy.y);
-                    if (dist < tower.range && tower.cooldown <= 0) {
-                        // Create projectile
-                        const proj = document.createElement('div');
-                        proj.className = 'td-projectile';
-                        proj.style.left = tower.x + 'px';
-                        proj.style.top = tower.y + 'px';
-                        document.getElementById('tdCanvas').appendChild(proj);
-                        
-                        tdProjectiles.push({
-                            x: tower.x,
-                            y: tower.y,
-                            target: enemy,
-                            element: proj,
-                            damage: tower.damage
-                        });
-                        
-                        tower.cooldown = 30;
+        function makeTTTAIMove() {
+            const empty = tttBoard.map((v, i) => v === '' ? i : null).filter(v => v !== null);
+            if (empty.length) {
+                // Try to win
+                for (let i of empty) {
+                    tttBoard[i] = 'O';
+                    if (checkTTTWin()) {
+                        handleTTTClick(i);
+                        return;
                     }
-                });
-
-                // Enemy reached bottom
-                if (enemy.y > 240) {
-                    enemy.element.remove();
-                    tdEnemies.splice(i, 1);
-                    tdLives--;
-                    document.getElementById('livesTD').textContent = tdLives;
-                    playSound(300, 'sawtooth', 0.1);
-                    
-                    if (tdLives <= 0) gameOverTD();
+                    tttBoard[i] = '';
                 }
-            });
-
-            // Update projectiles
-            tdProjectiles.forEach((proj, i) => {
-                if (!proj.target || !tdEnemies.includes(proj.target)) {
-                    proj.element.remove();
-                    tdProjectiles.splice(i, 1);
+                // Block X
+                for (let i of empty) {
+                    tttBoard[i] = 'X';
+                    if (checkTTTWin()) {
+                        tttBoard[i] = 'O';
+                        handleTTTClick(i);
+                        return;
+                    }
+                    tttBoard[i] = '';
+                }
+                // Take center
+                if (empty.includes(4)) {
+                    handleTTTClick(4);
                     return;
                 }
-                
-                const dx = proj.target.x - proj.x;
-                const dy = proj.target.y - proj.y;
-                const dist = Math.hypot(dx, dy);
-                
-                if (dist < 10) {
-                    proj.target.health -= proj.damage;
-                    proj.element.remove();
-                    tdProjectiles.splice(i, 1);
+                // Random
+                handleTTTClick(empty[Math.floor(Math.random() * empty.length)]);
+            }
+        }
+
+        function toggleTTTAI() {
+            tttAIEnabled = !tttAIEnabled;
+            document.getElementById('btnTTTAI').textContent = tttAIEnabled ? '🤖 vs AI: ON' : '🤖 vs AI: OFF';
+            initTicTacToe();
+        }
+
+        function resetTTTScore() {
+            xWins = 0;
+            oWins = 0;
+            document.getElementById('xWins').textContent = '0';
+            document.getElementById('oWins').textContent = '0';
+        }
+
+        // ==================== GAME 8: DAMA (CHECKERS) ====================
+        let damaBoard = [], damaTurn = 'red', damaSelected = null;
+        let damaAIEnabled = false, damaHistory = [];
+
+        function initDama() {
+            damaBoard = Array(8).fill().map(() => Array(8).fill(null));
+            // Place pieces
+            for (let r = 0; r < 3; r++) {
+                for (let c = 0; c < 8; c++) {
+                    if ((r + c) % 2 === 1) damaBoard[r][c] = {color: 'black', king: false};
+                }
+            }
+            for (let r = 5; r < 8; r++) {
+                for (let c = 0; c < 8; c++) {
+                    if ((r + c) % 2 === 1) damaBoard[r][c] = {color: 'red', king: false};
+                }
+            }
+            damaTurn = 'red';
+            damaSelected = null;
+            document.getElementById('damaStatus').textContent = "Red's Turn";
+            document.getElementById('overDama').style.display = 'none';
+            updateDamaScore();
+            renderDama();
+        }
+
+        function renderDama() {
+            const board = document.getElementById('damaBoard');
+            board.innerHTML = '';
+            for (let r = 0; r < 8; r++) {
+                for (let c = 0; c < 8; c++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'dama-cell ' + ((r + c) % 2 === 0 ? 'light' : 'dark');
                     
-                    if (proj.target.health <= 0) {
-                        const idx = tdEnemies.indexOf(proj.target);
-                        if (idx > -1) {
-                            tdEnemies[idx].element.remove();
-                            tdEnemies.splice(idx, 1);
-                            tdGold += proj.target.value;
-                            document.getElementById('goldTD').textContent = tdGold;
-                            playSound(600, 'sine', 0.1);
-                            createParticles(proj.target.x, proj.target.y, '#ff1744', 8);
-                        }
+                    if (damaSelected && damaSelected.r === r && damaSelected.c === c) {
+                        cell.classList.add('selected');
+                    }
+                    
+                    if (damaSelected && isValidDamaMove(damaSelected.r, damaSelected.c, r, c)) {
+                        cell.classList.add('valid-move');
+                    }
+                    
+                    if (damaBoard[r][c]) {
+                        const piece = document.createElement('div');
+                        piece.className = 'dama-piece ' + damaBoard[r][c].color;
+                        if (damaBoard[r][c].king) piece.classList.add('king');
+                        cell.appendChild(piece);
+                    }
+                    
+                    cell.onclick = () => handleDamaClick(r, c);
+                    board.appendChild(cell);
+                }
+            }
+        }
+
+        function handleDamaClick(r, c) {
+            const piece = damaBoard[r][c];
+            
+            if (!damaSelected) {
+                if (piece && piece.color === damaTurn) {
+                    damaSelected = {r, c};
+                    document.getElementById('damaStatus').textContent = 'Select destination';
+                    renderDama();
+                }
+            } else {
+                if (isValidDamaMove(damaSelected.r, damaSelected.c, r, c)) {
+                    damaHistory.push({
+                        board: damaBoard.map(row => row.map(p => p ? {...p} : null)),
+                        turn: damaTurn
+                    });
+                    
+                    const movingPiece = damaBoard[damaSelected.r][damaSelected.c];
+                    damaBoard[r][c] = movingPiece;
+                    damaBoard[damaSelected.r][damaSelected.c] = null;
+                    
+                    // Capture
+                    const dr = r - damaSelected.r;
+                    const dc = c - damaSelected.c;
+                    if (Math.abs(dr) === 2) {
+                        const midR = damaSelected.r + dr / 2;
+                        const midC = damaSelected.c + dc / 2;
+                        damaBoard[midR][midC] = null;
+                        playSound(500, 'square', 0.1);
+                    } else {
+                        playSound(400, 'sine', 0.1);
+                    }
+                    
+                    // King promotion
+                    if ((movingPiece.color === 'red' && r === 0) || 
+                        (movingPiece.color === 'black' && r === 7)) {
+                        movingPiece.king = true;
+                    }
+                    
+                    damaTurn = damaTurn === 'red' ? 'black' : 'red';
+                    document.getElementById('damaStatus').textContent = (damaTurn === 'red' ? 'Red' : 'Black') + "'s Turn";
+                    damaSelected = null;
+                    updateDamaScore();
+                    renderDama();
+                    
+                    if (checkDamaWin()) {
+                        document.getElementById('damaResult').textContent = (damaTurn === 'red' ? 'Black' : 'Red') + ' Wins!';
+                        document.getElementById('overDama').style.display = 'block';
+                        playSound(800, 'sine', 0.3);
+                    } else if (damaAIEnabled && damaTurn === 'black') {
+                        setTimeout(makeDamaAIMove, 500);
                     }
                 } else {
-                    proj.x += (dx / dist) * 8;
-                    proj.y += (dy / dist) * 8;
-                    proj.element.style.left = proj.x + 'px';
-                    proj.element.style.top = proj.y + 'px';
+                    damaSelected = null;
+                    document.getElementById('damaStatus').textContent = (damaTurn === 'red' ? 'Red' : 'Black') + "'s Turn";
+                    renderDama();
                 }
-            });
-
-            // Wave complete
-            if (tdEnemies.length === 0 && !tdSpawnInterval) {
-                tdRunning = false;
-                document.getElementById('btnTD').textContent = '▶️ Start Wave ' + (tdWave + 1);
-                tdGold += 50; // Wave bonus
-                document.getElementById('goldTD').textContent = tdGold;
             }
         }
 
-        function gameOverTD() {
-            clearInterval(tdInterval);
-            clearInterval(tdSpawnInterval);
-            tdRunning = false;
-            document.getElementById('finalWaveTD').textContent = tdWave;
-            document.getElementById('overTD').style.display = 'block';
-            playSound(200, 'sawtooth', 0.5);
+        function isValidDamaMove(fromR, fromC, toR, toC) {
+            if (damaBoard[toR][toC]) return false;
+            const piece = damaBoard[fromR][fromC];
+            const dr = toR - fromR;
+            const dc = toC - fromC;
+            
+            if (Math.abs(dr) !== Math.abs(dc)) return false;
+            
+            const dir = piece.color === 'red' ? -1 : 1;
+            
+            if (!piece.king && dr * dir < 0) return false;
+            
+            if (Math.abs(dr) === 1) {
+                return !hasCaptureMove(piece.color);
+            } else if (Math.abs(dr) === 2) {
+                const midR = fromR + dr / 2;
+                const midC = fromC + dc / 2;
+                const midPiece = damaBoard[midR][midC];
+                return midPiece && midPiece.color !== piece.color;
+            }
+            return false;
+        }
+
+        function hasCaptureMove(color) {
+            for (let r = 0; r < 8; r++) {
+                for (let c = 0; c < 8; c++) {
+                    if (damaBoard[r][c] && damaBoard[r][c].color === color) {
+                        for (let dr = -2; dr <= 2; dr += 4) {
+                            for (let dc = -2; dc <= 2; dc += 4) {
+                                if (isValidDamaMove(r, c, r + dr, c + dc)) return true;
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        function updateDamaScore() {
+            let red = 0, black = 0;
+            for (let r = 0; r < 8; r++) {
+                for (let c = 0; c < 8; c++) {
+                    if (damaBoard[r][c]) {
+                        if (damaBoard[r][c].color === 'red') red++;
+                        else black++;
+                    }
+                }
+            }
+            document.getElementById('redScore').textContent = red;
+            document.getElementById('blackScore').textContent = black;
+        }
+
+        function checkDamaWin() {
+            let red = 0, black = 0;
+            for (let r = 0; r < 8; r++) {
+                for (let c = 0; c < 8; c++) {
+                    if (damaBoard[r][c]) {
+                        if (damaBoard[r][c].color === 'red') red++;
+                        else black++;
+                    }
+                }
+            }
+            return red === 0 || black === 0;
+        }
+
+        function makeDamaAIMove() {
+            let moves = [];
+            for (let fromR = 0; fromR < 8; fromR++) {
+                for (let fromC = 0; fromC < 8; fromC++) {
+                    if (damaBoard[fromR][fromC] && damaBoard[fromR][fromC].color === 'black') {
+                        for (let toR = 0; toR < 8; toR++) {
+                            for (let toC = 0; toC < 8; toC++) {
+                                if (isValidDamaMove(fromR, fromC, toR, toC)) {
+                                    moves.push({fromR, fromC, toR, toC});
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            if (moves.length) {
+                // Prioritize captures
+                moves.sort((a, b) => Math.abs(b.toR - b.fromR) - Math.abs(a.toR - a.fromR));
+                const move = moves[0];
+                damaSelected = {r: move.fromR, c: move.fromC};
+                handleDamaClick(move.toR, move.toC);
+            }
+        }
+
+        function toggleDamaAI() {
+            damaAIEnabled = !damaAIEnabled;
+            document.getElementById('btnDamaAI').textContent = damaAIEnabled ? '🤖 vs AI: ON' : '🤖 vs AI: OFF';
+            initDama();
+        }
+
+        function undoDama() {
+            if (damaHistory.length) {
+                const prev = damaHistory.pop();
+                damaBoard = prev.board;
+                damaTurn = prev.turn;
+                damaSelected = null;
+                document.getElementById('damaStatus').textContent = (damaTurn === 'red' ? 'Red' : 'Black') + "'s Turn";
+                updateDamaScore();
+                renderDama();
+            }
+        }
+
+        // ==================== GAME 9: SHOGI ====================
+        const shogiPieces = {
+            'p': '歩', 'l': '香', 'n': '桂', 's': '銀', 'g': '金', 'k': '玉', 'r': '飛', 'b': '角',
+            'P': 'と', 'L': '杏', 'N': '圭', 'S': '全', 'R': '龍', 'B': '馬'
+        };
+
+        let shogiBoard = [], shogiTurn = 'sente', shogiSelected = null;
+        let shogiAIEnabled = false, shogiHistory = [];
+
+        function initShogi() {
+            const setup = [
+                'lnsgkgsnl',
+                '.r.....b.',
+                'ppppppppp',
+                '.........',
+                '.........',
+                '.........',
+                'PPPPPPPPP',
+                '.B.....R.',
+                'LNSGKGSNL'
+            ];
+            shogiBoard = setup.map(row => row.split('').map(c => c === '.' ? null : {piece: c, promoted: false}));
+            shogiTurn = 'sente';
+            shogiSelected = null;
+            document.getElementById('shogiTurn').textContent = 'Sente (Black)';
+            document.getElementById('shogiStatus').textContent = 'Select a piece';
+            document.getElementById('overShogi').style.display = 'none';
+            renderShogi();
+        }
+
+        function renderShogi() {
+            const board = document.getElementById('shogiBoard');
+            board.innerHTML = '';
+            for (let r = 0; r < 9; r++) {
+                for (let c = 0; c < 9; c++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'shogi-cell';
+                    
+                    if (shogiSelected && shogiSelected.r === r && shogiSelected.c === c) {
+                        cell.classList.add('selected');
+                    }
+                    
+                    if (shogiSelected && isValidShogiMove(shogiSelected.r, shogiSelected.c, r, c)) {
+                        cell.classList.add('valid-move');
+                    }
+                    
+                    if (shogiBoard[r][c]) {
+                        const piece = document.createElement('div');
+                        piece.className = 'shogi-piece ' + (shogiBoard[r][c].piece === shogiBoard[r][c].piece.toUpperCase() ? 'gote' : 'sente');
+                        piece.textContent = shogiPieces[shogiBoard[r][c].piece] || shogiBoard[r][c].piece;
+                        cell.appendChild(piece);
+                    }
+                    
+                    cell.onclick = () => handleShogiClick(r, c);
+                    board.appendChild(cell);
+                }
+            }
+        }
+
+        function handleShogiClick(r, c) {
+            const piece = shogiBoard[r][c];
+            
+            if (!shogiSelected) {
+                if (piece && 
+                    ((shogiTurn === 'sente' && piece.piece === piece.piece.toLowerCase()) ||
+                     (shogiTurn === 'gote' && piece.piece === piece.piece.toUpperCase()))) {
+                    shogiSelected = {r, c};
+                    document.getElementById('shogiStatus').textContent = 'Select destination';
+                    renderShogi();
+                }
+            } else {
+                if (isValidShogiMove(shogiSelected.r, shogiSelected.c, r, c)) {
+                    shogiHistory.push({
+                        board: shogiBoard.map(row => row.map(p => p ? {...p} : null)),
+                        turn: shogiTurn
+                    });
+                    
+                    const movingPiece = shogiBoard[shogiSelected.r][shogiSelected.c];
+                    
+                    // Capture
+                    if (shogiBoard[r][c]) {
+                        playSound(500, 'square', 0.1);
+                    } else {
+                        playSound(400, 'sine', 0.1);
+                    }
+                    
+                    // Promotion zone
+                    if (!movingPiece.promoted && 'plnsrb'.includes(movingPiece.piece.toLowerCase())) {
+                        if ((shogiTurn === 'sente' && r <= 2) || (shogiTurn === 'gote' && r >= 6)) {
+                            movingPiece.piece = movingPiece.piece.toUpperCase();
+                            movingPiece.promoted = true;
+                        }
+                    }
+                    
+                    shogiBoard[r][c] = movingPiece;
+                    shogiBoard[shogiSelected.r][shogiSelected.c] = null;
+                    
+                    shogiTurn = shogiTurn === 'sente' ? 'gote' : 'sente';
+                    document.getElementById('shogiTurn').textContent = shogiTurn === 'sente' ? 'Sente (Black)' : 'Gote (White)';
+                    document.getElementById('shogiStatus').textContent = 'Select a piece';
+                    shogiSelected = null;
+                    renderShogi();
+                    
+                    if (checkShogiWin()) {
+                        document.getElementById('shogiResult').textContent = 'Checkmate!';
+                        document.getElementById('shogiWinner').textContent = (shogiTurn === 'sente' ? 'Gote' : 'Sente') + ' Wins!';
+                        document.getElementById('overShogi').style.display = 'block';
+                        playSound(800, 'sine', 0.3);
+                    } else if (shogiAIEnabled && shogiTurn === 'gote') {
+                        setTimeout(makeShogiAIMove, 500);
+                    }
+                } else {
+                    shogiSelected = null;
+                    document.getElementById('shogiStatus').textContent = 'Select a piece';
+                    renderShogi();
+                }
+            }
+        }
+
+        function isValidShogiMove(fromR, fromC, toR, toC) {
+            if (shogiBoard[toR][toC] && 
+                ((shogiTurn === 'sente' && shogiBoard[toR][toC].piece === shogiBoard[toR][toC].piece.toUpperCase()) ||
+                 (shogiTurn === 'gote' && shogiBoard[toR][toC].piece === shogiBoard[toR][toC].piece.toLowerCase()))) {
+                return false;
+            }
+            
+            const piece = shogiBoard[fromR][fromC].piece.toLowerCase();
+            const dr = toR - fromR;
+            const dc = toC - fromC;
+            const isSente = shogiBoard[fromR][fromC].piece === piece;
+            
+            switch(piece) {
+                case 'p':
+                    return dc === 0 && dr === (isSente ? -1 : 1);
+                case 'l':
+                    return dc === 0 && (isSente ? dr < 0 : dr > 0) && clearPath(fromR, fromC, toR, toC);
+                case 'n':
+                    return Math.abs(dc) === 1 && dr === (isSente ? -2 : 2);
+                case 's':
+                    return (Math.abs(dc) === 1 && Math.abs(dr) === 1) || (dc === 0 && dr === (isSente ? -1 : 1));
+                case 'g':
+                case 'p':
+                case 'l':
+                case 'n':
+                case 's':
+                    return Math.abs(dc) <= 1 && Math.abs(dr) <= 1 && !(Math.abs(dc) === 1 && dr === (isSente ? 1 : -1));
+                case 'k':
+                    return Math.abs(dc) <= 1 && Math.abs(dr) <= 1;
+                case 'r':
+                    return (dr === 0 || dc === 0) && clearPath(fromR, fromC, toR, toC);
+                case 'b':
+                    return Math.abs(dr) === Math.abs(dc) && clearPath(fromR, fromC, toR, toC);
+                case 'R':
+                    return (dr === 0 || dc === 0 || (Math.abs(dc) === 1 && Math.abs(dr) === 1)) && 
+                           (Math.abs(dc) <= 1 && Math.abs(dr) <= 1 ? true : clearPath(fromR, fromC, toR, toC));
+                case 'B':
+                    return (Math.abs(dr) === Math.abs(dc) || (Math.abs(dc) <= 1 && Math.abs(dr) <= 1 && !(Math.abs(dc) === 1 && Math.abs(dr) === 1))) && 
+                           (Math.abs(dc) <= 1 && Math.abs(dr) <= 1 ? true : clearPath(fromR, fromC, toR, toC));
+            }
+            return false;
+        }
+
+        function checkShogiWin() {
+            let hasKing = false;
+            for (let r = 0; r < 9; r++) {
+                for (let c = 0; c < 9; c++) {
+                    if (shogiBoard[r][c] && shogiBoard[r][c].piece.toLowerCase() === 'k') {
+                        if (shogiTurn === 'sente' && shogiBoard[r][c].piece === 'k') hasKing = true;
+                        if (shogiTurn === 'gote' && shogiBoard[r][c].piece === 'K') hasKing = true;
+                    }
+                }
+            }
+            return !hasKing;
+        }
+
+        function makeShogiAIMove() {
+            let moves = [];
+            for (let fromR = 0; fromR < 9; fromR++) {
+                for (let fromC = 0; fromC < 9; fromC++) {
+                    if (shogiBoard[fromR][fromC] && shogiBoard[fromR][fromC].piece === shogiBoard[fromR][fromC].piece.toUpperCase()) {
+                        for (let toR = 0; toR < 9; toR++) {
+                            for (let toC = 0; toC < 9; toC++) {
+                                if (isValidShogiMove(fromR, fromC, toR, toC)) {
+                                    moves.push({fromR, fromC, toR, toC});
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            if (moves.length) {
+                // Prioritize captures
+                moves.sort((a, b) => {
+                    const valA = shogiBoard[a.toR][a.toC] ? 1 : 0;
+                    const valB = shogiBoard[b.toR][b.toC] ? 1 : 0;
+                    return valB - valA;
+                });
+                
+                const move = moves[0];
+                shogiSelected = {r: move.fromR, c: move.fromC};
+                handleShogiClick(move.toR, move.toC);
+            }
+        }
+
+        function toggleShogiAI() {
+            shogiAIEnabled = !shogiAIEnabled;
+            document.getElementById('btnShogiAI').textContent = shogiAIEnabled ? '🤖 vs AI: ON' : '🤖 vs AI: OFF';
+            initShogi();
+        }
+
+        function undoShogi() {
+            if (shogiHistory.length) {
+                const prev = shogiHistory.pop();
+                shogiBoard = prev.board;
+                shogiTurn = prev.turn;
+                shogiSelected = null;
+                document.getElementById('shogiTurn').textContent = shogiTurn === 'sente' ? 'Sente (Black)' : 'Gote (White)';
+                renderShogi();
+            }
         }
 
         // ==================== INITIALIZATION ====================
@@ -3194,24 +2989,92 @@
             initSnake();
             initTetris();
             initWordle();
-            initMines();
-            initFlappy();
             initChess();
             initSudoku();
-            initPlatformer();
-            initTD();
+            initTicTacToe();
+            initDama();
+            initShogi();
             
-            // Try to load saved data
             const saved = localStorage.getItem(STORAGE_KEY);
             if (saved) {
                 showNotification('Save data found! Click Load All to restore.');
             }
         };
 
-        // Auto-save every 30 seconds
         setInterval(() => {
             if (globalStats.gamesPlayed > 0) saveAllGames();
         }, 30000);
+
+        // Keyboard controls
+        document.addEventListener('keydown', e => {
+            // 2048
+            if (document.getElementById('tab-2048').classList.contains('active')) {
+                if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                    e.preventDefault();
+                    move2048(e.key.replace('Arrow', '').toLowerCase());
+                }
+            }
+            // Snake
+            else if (document.getElementById('tab-snake').classList.contains('active') && snakeRunning) {
+                switch(e.key) {
+                    case 'ArrowUp': if (dir.y === 0) nextDir = {x: 0, y: -1}; break;
+                    case 'ArrowDown': if (dir.y === 0) nextDir = {x: 0, y: 1}; break;
+                    case 'ArrowLeft': if (dir.x === 0) nextDir = {x: -1, y: 0}; break;
+                    case 'ArrowRight': if (dir.x === 0) nextDir = {x: 1, y: 0}; break;
+                    case ' ': e.preventDefault(); toggleSnake(); break;
+                }
+            }
+            // Tetris
+            else if (document.getElementById('tab-tetris').classList.contains('active') && tetrisRunning && currentPiece) {
+                switch(e.key) {
+                    case 'ArrowLeft': 
+                        if (isValidPosition(currentPiece.shape, currentPiece.x - 1, currentPiece.y)) currentPiece.x--;
+                        break;
+                    case 'ArrowRight':
+                        if (isValidPosition(currentPiece.shape, currentPiece.x + 1, currentPiece.y)) currentPiece.x++;
+                        break;
+                    case 'ArrowDown':
+                        updateTetris();
+                        scoreTetris += 1;
+                        document.getElementById('scoreTetris').textContent = scoreTetris;
+                        break;
+                    case 'ArrowUp': rotatePiece(); break;
+                    case ' ': hardDrop(); break;
+                }
+                renderTetris();
+            }
+            // Wordle
+            else if (document.getElementById('tab-wordle').classList.contains('active')) {
+                if (document.getElementById('overWordle').style.display === 'block') return;
+                if (e.key === 'Enter') submitGuess();
+                else if (e.key === 'Backspace' && currentCol > 0) {
+                    currentCol--;
+                    gridWordle[currentRow][currentCol] = '';
+                    renderWordle();
+                }
+                else if (/^[a-zA-Z]$/.test(e.key)) inputLetter(e.key.toUpperCase());
+            }
+            // Sudoku
+            else if (document.getElementById('tab-sudoku').classList.contains('active') && selectedSudoku) {
+                const num = parseInt(e.key);
+                const {r, c} = selectedSudoku;
+                
+                if (num >= 0 && num <= 9) {
+                    if (sudokuSolution[r][c] !== sudokuGrid[r][c] || num === 0) {
+                        sudokuGrid[r][c] = num;
+                        if (num !== 0 && num !== sudokuSolution[r][c]) {
+                            document.getElementById('sudokuStatus').textContent = 'Incorrect!';
+                            playSound(300, 'sawtooth', 0.1);
+                        } else {
+                            document.getElementById('sudokuStatus').textContent = 'Good!';
+                            if (num !== 0) playSound(500, 'sine', 0.1);
+                        }
+                        renderSudoku();
+                        if (num !== 0) checkWinSudoku();
+                    }
+                }
+            }
+        });
     </script>
 </body>
 </html>
